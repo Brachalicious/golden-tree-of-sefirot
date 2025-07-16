@@ -1,0 +1,194 @@
+body {
+  background-image: url('parchment.jpg'); /* Make sure this file exists in your project folder */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  font-family: serif;
+}
+
+/* 🍎 Sefirot Golden Apples */
+.sefira {
+  pointer-events: auto;
+  width: 90px;
+  height: 90px;
+  background: radial-gradient(circle, gold 30%, goldenrod 100%);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  font-size: 1rem;
+  text-shadow: 1px 1px 2px black;
+  box-shadow: 0 0 12px 2px gold;
+  position: absolute;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.sefira:hover {
+  transform: scale(1.1);
+  background-color: rgba(255, 223, 0, 0.9);
+}
+
+/* Styling for floating, dark gold, and moving Aleph-Bet letters */
+.aleph-bet {
+  width: 35px; /* Keep defined area for consistent positioning */
+  height: 35px;
+  background-color: transparent; /* Make background transparent */
+  border-radius: 0; /* Remove circular shape */
+  border: none; /* Remove border */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.3rem; /* Adjusted: Made letters a bit bigger */
+  font-weight: bold;
+  color: #B8860B; /* Changed: Dark goldenrod color */
+  text-shadow: 0 0 3px rgba(184,134,11,0.8), 0 0 6px rgba(184,134,11,0.5); /* Subtle dark gold glow */
+  box-shadow: none; /* Ensure no box-shadow */
+  transition: transform 0.1s ease-in-out, color 0.1s ease-in-out, text-shadow 0.2s ease-in-out;
+  animation: float 3s ease-in-out infinite alternate; /* Subtle floating movement */
+}
+.aleph-bet:hover {
+  transform: scale(1.3); /* Scale up more for floating effect */
+  color: #DAA520; /* Lighter goldenrod on hover */
+  text-shadow: 0 0 5px rgba(218,165,32,0.9), 0 0 10px rgba(218,165,32,0.6); /* Enhanced glow on hover */
+}
+
+/* Keyframes for subtle floating movement */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Styling for the guidance arrow and text */
+#guidanceArrow {
+  position: absolute;
+  z-index: 51; /* Make sure it's above other elements */
+  display: flex;
+  align-items: center;
+  white-space: nowrap; /* Keep text on one line */
+  cursor: pointer; /* Indicate it's related to the clickable logo */
+}
+
+#guidanceArrow .guidance-text {
+  font-size: 1.1rem; /* Slightly larger text */
+  color: #FFD700; /* Brighter gold color */
+  margin-right: 8px; /* More space between text and arrow */
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add a subtle shadow for better readability */
+}
+
+#guidanceArrow .arrow {
+  font-size: 2rem; /* Larger 
+  color: #FFD700; /* Brighter gold color */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+  animation: pulse 1.5s infinite ease-in-out; /* Changed to a pulsing animation */
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Chatbot related styles */
+#popupBox {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100px; /* Adjust as needed */
+  max-width: 90%;
+  background-color: white;
+  border: 2px solid #FFD700;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  z-index: 100;
+  max-height: 70vh; /* Limit height */
+  overflow-y: auto; /* Allow scrolling */
+}
+#chat-popup {
+  max-height: 80vh; /* Limit height */
+  overflow-y: hidden; /* Hide scroll for the main popup, chat-content handles its own */
+}
+#chat-content {
+  max-height: calc(80vh - 100px); /* Adjust based on header/input height */
+}
+/* Simple loading animation */
+.loading-dots::after {
+  content: ' .';
+  animation: dots 1s steps(5, end) infinite;
+}
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  40% {
+    color: black;
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  60% {
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 black;
+  }
+}
+/* New: Gold Glow around the Chatbot Leaf Logo */
+#guideLeaf {
+    /* Preserve existing Tailwind classes from HTML */
+    /* Add CSS filters for glow and animation */
+    filter: drop-shadow(0 0 10px #FFD700) drop_shadow(0 0 20px rgba(255,215,0,0.5)); /* Gold glow */
+    animation: pulse-glow 2s infinite alternate; /* Subtle pulse animation for the glow */
+}
+
+@keyframes pulse-glow {
+    0% { filter: drop-shadow(0 0 10px #FFD700) drop_shadow(0 0 20px rgba(255,215,0,0.5)); }
+    50% { filter: drop-shadow(0 0 15px #FFD700) drop_shadow(0 0 25px rgba(255,215,0,0.7)); }
+    100% { filter: drop-shadow(0 0 10px #FFD700) drop_shadow(0 0 20px rgba(255,215,0,0.5)); }
+}
+
+/* Glistening Stars in the background */
+.background-stars {
+    position: fixed; /* Fixed to viewport */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Behind everything else */
+    background:
+        /* Small, faint stars */
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.7) 1px, transparent 1.5px),
+        radial-gradient(circle at 30% 70%, rgba(255,255,255,0.6) 1px, transparent 1.5px),
+        radial-gradient(circle at 70% 40%, rgba(255,255,255,0.5) 1px, transparent 1.5px),
+        radial-gradient(circle at 90% 80%, rgba(255,255,255,0.8) 1px, transparent 1.5px),
+        /* Slightly larger, brighter stars */
+        radial-gradient(circle at 50% 10%, rgba(255,255,255,0.9) 1.5px, transparent 2.5px),
+        radial-gradient(circle at 80% 60%, rgba(255,255,255,0.8) 1.5px, transparent 2.5px),
+        radial-gradient(circle at 20% 90%, rgba(255,255,255,0.7) 1.5px, transparent 2.5px),
+        radial-gradient(circle at 60% 25%, rgba(255,255,255,0.9) 1.5px, transparent 2.5px);
+    background-size: 100vw 100vh; /* Ensure gradients cover the full background */
+    animation: twinkle-bg 10s infinite alternate; /* Slower twinkle for background stars */
+}
+
+@keyframes twinkle-bg {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 0.3; }
+}
+
+
+  
