@@ -1,5 +1,12 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+
 body {
-  background-image: url('parchment.jpg'); /* Make sure this file exists in your project folder */
+  background-image: url('tree-background.png'); /* Make sure this file exists in your project folder */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -99,7 +106,7 @@ body {
 /* Chatbot related styles */
 #popupBox {
   position: absolute;
-  left: 50%;
+  left: 40%;
   transform: translateX(-50%);
   bottom: 100px; /* Adjust as needed */
   max-width: 90%;
