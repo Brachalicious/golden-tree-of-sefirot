@@ -1,0 +1,23 @@
+{
+  "name": "treeoflifeapp",
+  "version": "1.0.0",
+  "main": "chatbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brachalicious/golden-tree-of-sefirot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brachalicious/golden-tree-of-sefirot/issues"
+  },
+  "homepage": "https://github.com/Brachalicious/golden-tree-of-sefirot#readme",
+  "description": "",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
