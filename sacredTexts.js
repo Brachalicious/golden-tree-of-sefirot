@@ -28,6 +28,22 @@ export const seferYetzirahTeachings = {
   covenant: `"And as soon as our father Abraham, peace be upon him, had viewed and witnessed and seen and searched and understood and carved and hewn and exchanged and formed, he raised up his hand. The Lord of All, Blessed Is He, revealed Himself to him." - Sefer Yetzirah 6:4`
 };
 
+export const seferHaBahirTeachings = {
+  blessing: `"Why does the Torah begin with the letter ב? In order that it begin with a blessing (בְּרֵכָה). The word 'beginning' is nothing other than Wisdom. Wisdom is a blessing." - Sefer HaBahir 3`,
+  
+  structure: `"The Structure was completed in Abraham. It is written, 'For in the form of God, He made the man.' The gematria of Abraham is 248, the number of parts in man's body." - Sefer HaBahir 8`,
+  
+  tree: `"I am the One who planted this tree in order that all the world should delight in it. And in it, I spread All. I called it All because all depend upon it, all emanate from it, and all need it. To it they look, for it they wait, and from it, souls fly in joy." - Sefer HaBahir 22`,
+  
+  light: `"Illumination preceded the world... 'And God said, let there be light, and there was light.' They said to Him, 'Before the creation of Israel your son, will you then make him a crown?' He replied yes. This is what arises in thought." - Sefer HaBahir 16`,
+  
+  letters: `"The 22 Hebrew letters are the foundation of creation. Why is ג third? It has three parts, teaching us that it bestows (גּוֹמֶלֶת) kindness. It bestows, grows, and sustains." - Sefer HaBahir 19`,
+  
+  directions: `"Why is the letter ח open? Because all directions (רוּחַוֹת) are closed, except for the North, which is opened for good and for evil." - Sefer HaBahir 35`,
+  
+  garden: `"The world was sealed with six directions. Where is the Garden of Eden? It is on earth." - Sefer HaBahir 30-31`
+};
+
 // Enhanced letter descriptions with sacred text
 export const enhancedLetterContent = {
   'א': {
