@@ -157,28 +157,36 @@
         return "NO_DIAGNOSIS_MATCH";
       }
 
-      // Function to handle chatbot responses using LLM - simplified for general Q&A fallback
+      // Function to handle chatbot responses using LLM - Primary: Gemini, Backup: ChatGPT
       async function getBotResponse(userMessage) {
         chatbotLoading.classList.remove("hidden"); // Show loading indicator
-        let prompt = `The user said: "${userMessage}". Respond as a knowledgeable Mystic Guide. You can answer questions about Kabbalah, the Sefirot in general, and related Torah concepts or verses. Provide an engaging and insightful response, encouraging deeper exploration.`;
+        
+        // Try Gemini first
+        const geminiResponse = await tryGeminiAPI(userMessage);
+        if (geminiResponse !== null) {
+          chatbotLoading.classList.add("hidden");
+          return geminiResponse;
+        }
+        
+        // If Gemini fails, fallback to ChatGPT
+        console.log("Gemini failed, falling back to ChatGPT...");
+        const chatGPTResponse = await tryChatGPTAPI(userMessage);
+        chatbotLoading.classList.add("hidden");
+        return chatGPTResponse;
+      }
 
-        let chatHistory = [];
-        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-        const payload = { contents: chatHistory };
-        const apiKey = "AIzaSyCgtln1IbALJ55iAq1lwcY6rRIhaS2JHoc"; // Ensure this is your valid Gemini API Key
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
+      // Primary API: Google Gemini via Netlify Function
+      async function tryGeminiAPI(userMessage) {
         try {
-          const response = await fetch(apiUrl, {
+          const response = await fetch('/.netlify/functions/gemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ input: userMessage })
           });
 
           if (!response.ok) {
-            const errorData = await response.json();
-            console.error("API Error Response (LLM):", errorData);
-            return `API request failed: ${response.status} ${response.statusText}. This might be a temporary server issue or a problem with your API key configuration. Please try again or check your key.`;
+            console.error("Gemini API Error:", response.status, response.statusText);
+            return null; // Signal failure to try backup
           }
 
           const result = await response.json();
@@ -187,14 +195,39 @@
               result.candidates[0].content.parts.length > 0) {
             return result.candidates[0].content.parts[0].text;
           } else {
-            console.error("Unexpected API response structure (LLM):", result);
+            console.error("Unexpected Gemini response structure:", result);
+            return null;
+          }
+        } catch (error) {
+          console.error("Error calling Gemini API:", error);
+          return null; // Signal failure to try backup
+        }
+      }
+
+      // Backup API: OpenAI ChatGPT via Netlify Function
+      async function tryChatGPTAPI(userMessage) {
+        try {
+          const response = await fetch('/.netlify/functions/chatgpt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input: userMessage })
+          });
+
+          if (!response.ok) {
+            console.error("ChatGPT API Error:", response.status, response.statusText);
+            return `I'm having trouble connecting to my wisdom sources right now. Please try again in a moment. 🌿`;
+          }
+
+          const result = await response.json();
+          if (result.message) {
+            return result.message;
+          } else {
+            console.error("Unexpected ChatGPT response structure:", result);
             return "My apologies, I couldn't generate a response at this moment. Please try again.";
           }
         } catch (error) {
-          console.error("Error calling Gemini API (LLM):", error);
+          console.error("Error calling ChatGPT API:", error);
           return "I'm having trouble connecting right now. Please check your internet connection or try again later.";
-        } finally {
-          chatbotLoading.classList.add("hidden"); // Hide loading indicator
         }
       }
 
