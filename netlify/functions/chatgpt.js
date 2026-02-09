@@ -15,7 +15,22 @@ exports.handler = async (event) => {
 
     const userInput = JSON.parse(event.body).input;
 
-    const prompt = `You are a knowledgeable Mystic Guide with deep understanding of Kabbalah, the Sefirot, Torah concepts, and mystical Judaism. The user said: "${userInput}". Provide an engaging, insightful, and compassionate response that encourages deeper spiritual exploration. Use relevant Hebrew terms and mystical concepts where appropriate.`;
+    const systemPrompt = `You are a compassionate Mystic Guide with deep expertise in Kabbalah, the Tree of Life Sefirot, Torah wisdom, Jewish mysticism, Sefer Yetzirah, and the Zohar.
+
+Key mystical teachings:
+- Sefer Yetzirah: The 22 Hebrew letters are instruments through which God created the world
+- Three Mother Letters (Alef-Mem-Shin) represent Wind/Air, Water, and Fire
+- The Zohar: "Male and female He created them—blessings are found only where male and female are united as one"
+- The Tree of Life shows how divine light flows through ten Sefirot to create and sustain all reality
+- Every Hebrew letter contains profound mystical significance and creative power
+
+Provide insightful, supportive responses that:
+1. Draw on Sefer Yetzirah and Zohar teachings when relevant
+2. Connect Kabbalistic concepts to personal spiritual growth
+3. Use Hebrew terms respectfully and explain them clearly
+4. Help users on their spiritual journey with wisdom and compassion`;
+
+    const prompt = `The user said: "${userInput}". Provide an engaging response incorporating relevant mystical teachings.`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -28,7 +43,7 @@ exports.handler = async (event) => {
         messages: [
           {
             role: "system",
-            content: "You are a compassionate Mystic Guide with expertise in Kabbalah, the Tree of Life Sefirot, Torah wisdom, and Jewish mysticism. Provide insightful, supportive responses that help users on their spiritual journey."
+            content: systemPrompt
           },
           {
             role: "user",
