@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 exports.handler = async (event) => {
   try {
     const geminiApiKey = process.env.GEMINI_API_KEY;
@@ -7,7 +5,10 @@ exports.handler = async (event) => {
     if (!geminiApiKey) {
       return {
         statusCode: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
         body: JSON.stringify({ error: 'GEMINI_API_KEY not configured' }),
       };
     }
@@ -30,14 +31,20 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify(data),
     };
   } catch (error) {
     console.error('Gemini function error:', error);
     return {
       statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ error: error.message }),
     };
   }

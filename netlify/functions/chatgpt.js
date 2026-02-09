@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 exports.handler = async (event) => {
   try {
     const openaiApiKey = process.env.OPENAI_API_KEY;
@@ -7,7 +5,10 @@ exports.handler = async (event) => {
     if (!openaiApiKey) {
       return {
         statusCode: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
         body: JSON.stringify({ error: 'OPENAI_API_KEY not configured' }),
       };
     }
@@ -43,14 +44,20 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ message: data.choices?.[0]?.message?.content || "I couldn't generate a response." }),
     };
   } catch (error) {
     console.error('ChatGPT function error:', error);
     return {
       statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ error: error.message }),
     };
   }
