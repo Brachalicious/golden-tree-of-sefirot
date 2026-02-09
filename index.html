@@ -145,9 +145,46 @@
         }
       ];
 
-      // DIAGNOSTIC FUNCTION - USES YOUR SEFIROT MAP
+      // DIAGNOSTIC FUNCTION - USES YOUR SEFIROT MAP AND ALEPH-BET
       function diagnoseSefirah(userInput) {
         const input = userInput.toLowerCase();
+        
+        // First check for Hebrew letters (Aleph-Bet)
+        const hebrewLetterNames = {
+          'aleph': 'א', 'alef': 'א',
+          'bet': 'ב', 'beit': 'ב', 'vet': 'ב',
+          'gimmel': 'ג', 'gimel': 'ג',
+          'dalet': 'ד', 'daled': 'ד',
+          'heh': 'ה', 'hey': 'ה', 'he': 'ה',
+          'vav': 'ו', 'vov': 'ו', 'waw': 'ו',
+          'zayin': 'ז',
+          'chet': 'ח', 'het': 'ח', 'khet': 'ח',
+          'tet': 'ט',
+          'yud': 'י', 'yod': 'י',
+          'kaf': 'כ', 'chaf': 'כ',
+          'lamed': 'ל',
+          'mem': 'מ',
+          'nun': 'נ',
+          'samech': 'ס', 'samekh': 'ס',
+          'ayin': 'ע', 'ayn': 'ע',
+          'peh': 'פ', 'pey': 'פ', 'feh': 'פ',
+          'tzadi': 'צ', 'tsadi': 'צ', 'tzadik': 'צ',
+          'kuf': 'ק', 'quf': 'ק', 'kof': 'ק',
+          'resh': 'ר', 'reish': 'ר',
+          'shin': 'ש',
+          'taf': 'ת', 'tav': 'ת'
+        };
+        
+        // Check if user is asking about a Hebrew letter
+        for (let [name, letter] of Object.entries(hebrewLetterNames)) {
+          if (input.includes(name) || input.includes(letter)) {
+            if (contentMapAlephBet[letter]) {
+              return contentMapAlephBet[letter];
+            }
+          }
+        }
+        
+        // Then check for Sefirot keywords
         for (let sefirah of sefirotMap) {
           if (sefirah.keywords.some(kw => input.includes(kw))) {
             return sefirah.insight;
