@@ -2,79 +2,17 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-x: hidden;
 }
 
+
 body {
-  background-image: url('tree-background.png');
+  background-image: url('tree-background.png'); /* Make sure this file exists in your project folder */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
   font-family: serif;
 }
-
-/* Utility classes (replacing Tailwind) */
-.relative { position: relative; }
-.absolute { position: absolute; }
-.fixed { position: fixed; }
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.min-h-screen { min-height: 100vh; }
-.p-4 { padding: 1rem; }
-.bg-cover { background-size: cover; }
-.bg-no-repeat { background-repeat: no-repeat; }
-.bg-center { background-position: center; }
-.font-serif { font-family: serif; }
-.hidden { display: none; }
-.z-40 { z-index: 40; }
-.z-50 { z-index: 50; }
-.z-51 { z-index: 51; }
-.z-100 { z-index: 100; }
-.text-gray-500 { color: #6b7280; }
-.text-gray-600 { color: #4b5563; }
-.text-gray-800 { color: #1f2937; }
-.text-purple-700 { color: #7e22ce; }
-.text-sm { font-size: 0.875rem; }
-.italic { font-style: italic; }
-.font-bold { font-weight: bold; }
-.mb-2 { margin-bottom: 0.5rem; }
-.mt-2 { margin-top: 0.5rem; }
-.text-center { text-align: center; }
-.w-full { width: 100%; }
-.w-28 { width: 7rem; }
-.h-28 { height: 7rem; }
-.h-40 { height: 10rem; }
-.max-w-md { max-width: 28rem; }
-.max-w-full { max-width: 100%; }
-.rounded { border-radius: 0.25rem; }
-.rounded-full { border-radius: 9999px; }
-.rounded-xl { border-radius: 0.75rem; }
-.border { border-width: 1px; }
-.border-2 { border-width: 2px; }
-.border-gray-300 { border-color: #d1d5db; }
-.border-yellow-400 { border-color: #facc15; }
-.border-yellow-500 { border-color: #eab308; }
-.bg-white { background-color: white; }
-.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
-.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-.shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-.shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-.overflow-y-auto { overflow-y: auto; }
-.cursor-pointer { cursor: pointer; }
-.object-contain { object-fit: contain; }
-.hover\:scale-110:hover { transform: scale(1.1); }
-.transition { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
-.transform { transform: translateX(0); }
-.-translate-x-1\/2 { transform: translateX(-50%); }
-.-translate-y-1\/2 { transform: translateY(-50%); }
-.bottom-10 { bottom: 2.5rem; }
-.bottom-24 { bottom: 6rem; }
-.right-10 { right: 2.5rem; }
-.top-\[48\%\] { top: 48%; }
-.left-1\/2 { left: 50%; }
 
 /* 🍎 Sefirot Golden Apples */
 .sefira {
@@ -95,23 +33,6 @@ body {
   transition: transform 0.3s ease;
   cursor: pointer;
   z-index: 10;
-}
-
-/* Responsive Sefirot for smaller screens */
-@media (max-width: 768px) {
-  .sefira {
-    width: 60px;
-    height: 60px;
-    font-size: 0.75rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .sefira {
-    width: 50px;
-    height: 50px;
-    font-size: 0.65rem;
-  }
 }
 
 .sefira:hover {
@@ -138,24 +59,6 @@ body {
   transition: transform 0.1s ease-in-out, color 0.1s ease-in-out, text-shadow 0.2s ease-in-out;
   animation: float 3s ease-in-out infinite alternate; /* Subtle floating movement */
 }
-
-/* Responsive Aleph-Bet for smaller screens */
-@media (max-width: 768px) {
-  .aleph-bet {
-    width: 25px;
-    height: 25px;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .aleph-bet {
-    width: 20px;
-    height: 20px;
-    font-size: 0.85rem;
-  }
-}
-
 .aleph-bet:hover {
   transform: scale(1.3); /* Scale up more for floating effect */
   color: #DAA520; /* Lighter goldenrod on hover */
@@ -177,28 +80,6 @@ body {
   align-items: center;
   white-space: nowrap; /* Keep text on one line */
   cursor: pointer; /* Indicate it's related to the clickable logo */
-}
-
-/* Responsive guidance arrow */
-@media (max-width: 768px) {
-  #guidanceArrow {
-    white-space: normal;
-    max-width: 150px;
-  }
-  
-  #guidanceArrow .guidance-text {
-    font-size: 0.9rem !important;
-  }
-  
-  #guidanceArrow .arrow {
-    font-size: 1.5rem !important;
-  }
-}
-
-@media (max-width: 480px) {
-  #guidanceArrow {
-    display: none !important; /* Hide on very small screens to avoid clutter */
-  }
 }
 
 #guidanceArrow .guidance-text {
@@ -238,75 +119,12 @@ body {
   max-height: 70vh; /* Limit height */
   overflow-y: auto; /* Allow scrolling */
 }
-
-/* Responsive popup */
-@media (max-width: 768px) {
-  #popupBox {
-    left: 50%;
-    bottom: 80px;
-    max-width: 85%;
-    padding: 12px;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  #popupBox {
-    left: 50%;
-    bottom: 60px;
-    max-width: 90%;
-    padding: 10px;
-    font-size: 0.85rem;
-    max-height: 60vh;
-  }
-}
-
 #chat-popup {
   max-height: 80vh; /* Limit height */
   overflow-y: hidden; /* Hide scroll for the main popup, chat-content handles its own */
 }
-
-/* Responsive chat popup */
-@media (max-width: 768px) {
-  #chat-popup {
-    width: 280px !important;
-    right: 10px !important;
-    bottom: 20px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  #chat-popup {
-    width: calc(100vw - 20px) !important;
-    right: 10px !important;
-    left: 10px !important;
-    bottom: 10px !important;
-    max-width: none !important;
-  }
-}
-
 #chat-content {
   max-height: calc(80vh - 100px); /* Adjust based on header/input height */
-}
-
-/* Responsive guide leaf logo */
-#guideLeaf {
-  width: 7rem;
-  height: 7rem;
-}
-
-@media (max-width: 768px) {
-  #guideLeaf {
-    width: 5rem !important;
-    height: 5rem !important;
-  }
-}
-
-@media (max-width: 480px) {
-  #guideLeaf {
-    width: 4rem !important;
-    height: 4rem !important;
-  }
 }
 /* Simple loading animation */
 .loading-dots::after {
@@ -379,35 +197,5 @@ body {
     50% { opacity: 0.3; }
 }
 
-/* General responsive improvements */
-@media (max-width: 768px) {
-  body {
-    background-attachment: scroll; /* Better performance on mobile */
-  }
-  
-  #app {
-    padding: 1rem !important;
-  }
-}
-
-/* Prevent zoom on input focus for iOS */
-@media (max-width: 480px) {
-  input[type="text"],
-  input[type="search"],
-  textarea {
-    font-size: 16px !important;
-  }
-}
-
-/* Touch-friendly adjustments */
-@media (hover: none) and (pointer: coarse) {
-  .sefira:active {
-    transform: scale(1.15);
-  }
-  
-  .aleph-bet:active {
-    transform: scale(1.4);
-  }
-}
 
   
