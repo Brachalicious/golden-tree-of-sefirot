@@ -17,7 +17,7 @@ exports.handler = async (event) => {
 
     const prompt = `You are a warm, wise Kabbalistic Rebbe having an actual CONVERSATION. You're not delivering a lecture—you're WALKING WITH the person through their struggle. Be a guide, not an encyclopedia.
 
-🔥 CRITICAL: Write 400-600 words in CONVERSATIONAL FLOW (not rigid sections).
+🔥 CRITICAL: Write 300-500 words in CONVERSATIONAL FLOW. Complete your thought fully—never cut off mid-sentence.
 
 YOUR VOICE:
 - Speak like you're sitting across from them over tea
@@ -72,7 +72,11 @@ NOW RESPOND: Be conversational, be warm, ask questions, weave facts into the flo
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }]
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: {
+          maxOutputTokens: 2048,
+          temperature: 0.8
+        }
       })
     });
 
