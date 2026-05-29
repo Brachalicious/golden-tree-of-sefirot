@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
+  <title>Golden Tree of Sefirot</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    // START OF CHATBOT AND INTERACTIVITY JAVASCRIPT CODE - HYBRID SYSTEM
+    document.addEventListener("DOMContentLoaded", () => {
+      const chatInput = document.getElementById("chat-input");
+      const chatContent = document.getElementById("chat-content");
+      const popupBox = document.getElementById("popupBox");
+      const popupText = document.getElementById("popupText");
+      const chatbotLoading = document.getElementById("chatbot-loading");
+      let currentOpen = null;
+
+      // Full Sefirah content - "Associated Aleph Bet" updated to reflect YOUR path mapping
+      const contentMapSefirah = {
+        Keter: `<strong>Keter (Crown)</strong><br/>The highest Sefirah, representing divine will, pure consciousness, and infinite light. It is the primordial point beyond human comprehension, the source of all emanation.<br/><br/><strong>Associated Angels:</strong> Chayot HaKodesh (Holy Living Creatures), Seraphim.<br/><strong>Associated Aleph Bet:</strong> Dalet (ד), Heh (ה), or Vav (ו) – letters connecting Keter to other Sefirot, showing divine emanation.<br/><strong>Associated Constellations:</strong> Beyond specific constellations, as Keter transcends the manifest universe.`,
+        Chochmah: `<strong>Chochmah (Wisdom)</strong><br/>The first flash of an idea, pure undifferentiated wisdom, the point of emanation from Keter. It is the initial spark of creation, often associated with the 'Father' principle.<br/><br/><strong>Associated Angels:</strong> Ophanim (Wheels), also known as the Erelim.<br/><strong>Associated Aleph Bet:</strong> Shin (ש), Bet (ב), Zayin (ז), or Tet (ט) – letters on paths connected to Chochmah, revealing aspects of its wisdom.<br/><strong>Associated Constellations:</strong> Mazalot (general term for constellations), as Chochmah is the source of astrological influence and cosmic order.`,
+        Binah: `<strong>Binah (Understanding)</strong><br/>The expansion of Chochmah into detailed understanding, giving form and structure to the initial idea. It represents divine motherly nurturing, discernment, and the 'Mother' principle. It is one of the 'Three Mothers' along with Keter and Chochmah, forming the intellectual triad.<br/><br/><strong>Associated Angels:</strong> Aralim (Thrones), also known as the Cherubim.<br/><strong>Associated Aleph Bet:</strong> Gimel (ג), Vav (ו), Ayin (ע), Kuf (ק), or Shin (ש) – letters on paths connected to Binah, emphasizing its form-giving and understanding aspects.<br/><br/><strong>Associated Constellations:</strong> Tehom (Deep, Abyss), related to primordial waters and the vastness of understanding.`,
+        Chesed: `<strong>Chesed (Loving-kindness)</strong><br/>Expansive love, boundless grace, mercy, and benevolence. It is the outpouring of divine goodness, extending without limit, often associated with the 'Greatness' of God.<br/><br/><strong>Associated Angels:</strong> Chashmalim (Brilliant Ones/Amber), also known as Dominions.<br/><strong>Associated Aleph Bet:</strong> Aleph (א), Bet (ב), Chet (ח), or Kaf (כ) – letters on paths connected to Chesed, reflecting its expansive and loving qualities.<br/><br/><strong>Associated Constellations:</strong> Jupiter, representing expansion, abundance, and beneficence.`,
+        Gevurah: `<strong>Gevurah (Strength/Justice)</strong><br/>Restraint, discipline, judgment, and severity. It limits Chesed, providing structure for balance and justice in creation. Often associated with the 'Might' of God.<br/><br/><strong>Associated Angels:</strong> Seraphim (Fiery Ones), also known as Powers.<br/><br/><strong>Associated Aleph Bet:</strong> Aleph (א), Gimel (ג), Zayin (ז), Peh (פ), or Tzadi (צ) – letters on paths connected to Gevurah, highlighting its power and discernment.<br/><br/><strong>Associated Constellations:</strong> Mars, representing strength, discipline, and sometimes conflict.`,
+        Tiferet: `<strong>Tiferet (Beauty)</strong><br/>Harmony, compassion, truth, and balance. It is the central Sefirah, reconciling Chesed and Gevurah, and is often associated with the 'Son' or 'King' principle. It represents the beauty of God's perfect balance.<br/><br/><strong>Associated Angels:</strong> Shinanim (Burning Flames), also known as Virtues.<br/><br/><strong>Associated Aleph Bet:</strong> Dalet (ד), Chet (ח), Tet (ט), Yud (י), Samech (ס), Ayin (ע), Tzadi (צ), or Resh (ר) – letters on paths connected to Tiferet, emphasizing its central balancing role.<br/><br/><strong>Associated Constellations:</strong> Sun, representing illumination, centrality, and life-giving energy.`,
+        Netzach: `<strong>Netzach (Eternity/Victory)</strong><br/>Endurance, perseverance, victory, and divine triumph. It represents the drive to overcome obstacles and achieve goals, the 'Eternity' of God.<br/><br/><strong>Associated Angels:</strong> Tarshishim (Sparkling Ones), also known as Principalities.<br/><br/><strong>Associated Aleph Bet:</strong> Yud (י), Kaf (כ), Mem (מ), or Nun (נ) – letters on paths connected to Netzach, reflecting its enduring and conquering nature.<br/><br/><strong>Associated Constellations:</strong> Venus, representing victory, love, and enduring beauty.`,
+        Hod: `<strong>Hod (Splendor/Glory)</strong><br/>Humility, surrender, resonance, and divine glory. It is the receptive counterpart to Netzach, acknowledging the source of power, the 'Glory' of God.<br/><br/><strong>Associated Angels:</strong> Beni Elohim, also known as Archangels.<br/><br/><strong>Associated Aleph Bet:</strong> Lamed (ל), Mem (מ), Peh (פ), or Ayin (ע) – letters on paths connected to Hod, signifying its reflective and receptive qualities.<br/><br/><strong>Associated Constellations:</strong> Mercury, representing communication, intellect, and splendor.`,
+        Yesod: `<strong>Yesod (Foundation)</strong><br/>Connection, foundation, bonding, and the transmission of divine energy to Malkuth. It is the channel through which all preceding Sefirot flow into manifestation, the 'Foundation' of all existence.<br/><br/><strong>Associated Angels:</strong> Cherubim (Strong Ones/Guardians), also known as Angels.<br/><br/><strong>Associated Aleph Bet:</strong> Lamed (ל), Nun (נ), Resh (ר), or Taf (ת) – letters on paths connected to Yesod, representing its foundational and connective role.<br/><br/><strong>Associated Constellations:</strong> Moon, representing foundation, cycles, and the receptacle of light.`,
+        Malchut: `<strong>Malkuth (Kingdom/Presence)</strong><br/>The physical world, manifest reality, and the divine feminine presence (Shekhinah). It is the culmination of all divine emanations, where divinity is experienced in creation, the 'Kingdom' of God. It is also considered one of the 'Crossroads' in the Tree of Life, representing the horizontal links that balance energies.<br/><br/><strong>Associated Angels:</strong> Ishim (Souls of Fire/Men of God), also known as Aishim.<br/><br/><strong>Associated Aleph Bet:</strong> Taf (ת) – the letter on the path connecting Yesod to Malkuth, symbolizing truth and completion in manifestation.<br/><br/><strong>Associated Constellations:</strong> Earth, representing the physical realm, manifestation, and the culmination of all energies.`
+      };
+
+      // Content for Aleph-Bet letters on the paths based on YOUR custom mapping - Enhanced with Bahir teachings
+      const contentMapAlephBet = {
+        'א': `<strong>Aleph (א): Path Gevurah to Chesed</strong><br/>
+          <strong>Shape & Meaning:</strong> Aleph is composed of two Yuds (one above, one below) connected by a diagonal Vav, representing the unity of upper and lower worlds.<br/>
+          <strong>Gematria:</strong> 1 - Unity, Oneness of God<br/>
+          <strong>Path:</strong> Connects restriction (Gevurah) and expansion (Chesed), balancing judgment with mercy.<br/><br/>
+          📖 <strong>From Sefer Yetzirah:</strong> "He made the letter Alef reign over Wind/Breath, and He bound to it a crown. He combined them one with another. With them He sealed the Wind in the World, satiation in the Year, and the chest in the Person—the breath of life itself."<br/>
+          <a href="https://www.sefaria.org/Sefer_Yetzirah.3.6" target="_blank" style="color: #FFD700;">📚 Sefer Yetzirah 3:6</a><br/><br/>
+          🌬️ Aleph is silent yet carries all sound—the ineffable Name begins with this letter, teaching us that divine unity underlies all apparent duality.`,
+        
+        'ב': `<strong>Bet (ב): Path Chochmah to Chesed</strong><br/>
+          <strong>Shape & Meaning:</strong> Bet (ב) is shaped like a house with three walls—open on the left side, facing forward into creation. It is closed on three sides (above, behind, below) but open toward the future, teaching us to look forward, not back to what was before creation.<br/>
+          <strong>Gematria:</strong> 2 - Duality, blessing (בְּרָכָה), house (בַּיִת)<br/>
+          <strong>Path:</strong> Carries Wisdom (Chochmah) into manifestation as Loving-kindness (Chesed)—the 'house' that contains divine generosity.<br/><br/>
+          📖 <strong>From Sefer HaBahir:</strong> "Why does the Torah begin with the letter Bet (בְּרֵאשִׁית)? In order that it begin with a <em>blessing</em> (בְּרָכָה—bracha). For the word 'beginning' (רֵאשִׁית—reishit) is nothing other than <strong>Wisdom</strong> (Chochmah). And Wisdom is a blessing."<br/>
+          <a href="https://www.sefaria.org/Sefer_HaBahir.3" target="_blank" style="color: #FFD700;">📚 Sefer HaBahir 3</a><br/><br/>
+          🏠 <strong>The Shape Teaches:</strong> Bet is closed above (we cannot know what is above the heavens), closed behind (we cannot know what was before creation), closed below (we cannot know what is beneath the earth)—but open to the front, toward all that will unfold from the moment of <em>"Bereishit"</em>—In the Beginning.<br/><br/>
+          💫 The Torah begins with Bet to proclaim: <strong>Creation itself is a blessing!</strong> Every act of bringing wisdom into loving manifestation builds a dwelling place for the Divine Presence.`,
+        
+        'ג': `<strong>Gimmel (ג): Path Binah to Gevurah</strong><br/>
+          <strong>Shape & Meaning:</strong> Gimmel looks like a person running—a foot extended forward in motion. It pursues the Dalet (ד, the poor one) to give charity.<br/>
+          <strong>Gematria:</strong> 3 - Bestowing, running to give (גֹּמֶל חֶסֶד—gomel chesed)<br/>
+          <strong>Path:</strong> Brings Understanding (Binah) into disciplined Strength (Gevurah)—discernment applied with precision.<br/><br/>
+          📖 <strong>From Sefer HaBahir:</strong> "Why is Gimmel third? Because it has three parts. It teaches us that it <em>bestows</em> (גּוֹמֶלֶת—gomelet) kindness. What does it bestow? It bestows, it grows, and it sustains all that exists."<br/>
+          <a href="https://www.sefaria.org/Sefer_HaBahir.19" target="_blank" style="color: #FFD700;">📚 Sefer HaBahir 19</a><br/><br/>
+          🏃 Gimmel-Dalet (גד): The Gimmel runs toward the Dalet (the poor), symbolizing <em>gemilut chasadim</em>—acts of loving-kindness. Charity must be given with <em>running feet</em>, with urgency and joy!`,
+        'ד': `<strong>Dalet (ד): Path Keter to Tiferet</strong><br/>
+          <strong>Shape & Meaning:</strong> Dalet is a bent figure—a person bowing in humility, or one who is poor (דַּל—dal).<br/>
+          <strong>Gematria:</strong> 4 - Doorway (דֶּלֶת—delet), poverty, humility<br/>
+          <strong>Path:</strong> Direct descent from Divine Will (Keter) to Harmony (Tiferet)—the door through which blessing flows.<br/><br/>
+          📖 <strong>The Gimmel-Dalet Pair:</strong> "The Gimmel has a foot stretched out running toward the Dalet, because it is the way of the benevolent (gomel chasadim) to run after the poor (dal). The Dalet faces away because one must give to the poor with dignity—allowing them to receive without shame."<br/>
+          <a href="https://www.sefaria.org/Shabbat.104a" target="_blank" style="color: #FFD700;">📚 Talmud Shabbat 104a</a><br/><br/>
+          🚪 Dalet is the <em>door</em>—when we bow in humility (Keter's nothingness), divine beauty (Tiferet) flows through us into the world.`,
+        
+        'ה': `<strong>Heh (ה): Path Keter to Chochmah</strong><br/>
+          <strong>Shape & Meaning:</strong> Heh is like a window—open on the left side, allowing air and light to enter. It appears twice in God's Name (יהוה).<br/>
+          <strong>Gematria:</strong> 5 - The five levels of soul, the five books of Torah, breath (הֶבֶל—hevel)<br/>
+          <strong>Path:</strong> The breath of revelation from Infinite Crown (Keter) into the flash of Wisdom (Chochmah).<br/><br/>
+          📖 <strong>From Genesis:</strong> "And God <em>breathed</em> (וַיִּפַּח) into his nostrils the <em>breath of life</em> (נִשְׁמַת חַיִּים)—and man became a living soul." The letter Heh is that divine breath!<br/>
+          <a href="https://www.sefaria.org/Genesis.2.7" target="_blank" style="color: #FFD700;">📚 Genesis 2:7</a><br/><br/>
+          🌬️ <strong>The Divine Name:</strong> The Heh appears twice in YHVH (יהוה)—first after Yud (representing Chochmah/Wisdom, the Father principle), then after Vav (representing Tiferet, the Son). These two Hehs are Binah (Understanding, Mother) and Malchut (Kingdom, Daughter)—divine feminine breath giving form to creation.`,
+        
+        'ו': `<strong>Vav (ו): Path Keter to Binah</strong><br/>
+          <strong>Shape & Meaning:</strong> Vav is a straight vertical line—a hook, a nail, a connector. The letter of "and" (וְ).<br/>
+          <strong>Gematria:</strong> 6 - The six directions of space, the six days of creation, connection<br/>
+          <strong>Path:</strong> The nail that fastens Divine Will (Keter) to Understanding (Binah)—stabilizing the central pillar.<br/><br/>
+          📖 <strong>Six Days of Creation:</strong> Each day begins with "Vav" (וַיְהִי—"And there was..."). The Vav <em>connects</em> each day to the one before, showing continuous divine creative flow.<br/>
+          <a href="https://www.sefaria.org/Genesis.1" target="_blank" style="color: #FFD700;">📚 Genesis 1</a><br/><br/>
+          🔗 Vav is the <em>pillar of connection</em>—it joins heaven and earth, past and future, thought and form. In the Divine Name (יהוה), Vav represents Tiferet, the Son principle that unites all Sefirot.`,
+        
+        'ז': `<strong>Zayin (ז): Path Chochmah to Gevurah</strong><br/>
+          <strong>Shape & Meaning:</strong> Zayin looks like a sword or crowned weapon—a Vav (ו) with a crown on top.<br/>
+          <strong>Gematria:</strong> 7 - Shabbat (7th day), sustenance (זָן—zan, to nourish), weapon (זַיִן—zayin)<br/>
+          <strong>Path:</strong> Cuts Wisdom (Chochmah) into precise Strength (Gevurah)—discernment as divine sword.<br/><br/>
+          📖 <strong>From the Bahir:</strong> "Zayin—because it <em>nourishes</em> (זָן) all that exists. Just as a king provides for his subjects, so does this letter represent divine sustenance flowing through boundaries."<br/>
+          <a href="https://www.sefaria.org/Sefer_HaBahir" target="_blank" style="color: #FFD700;">📚 Sefer HaBahir</a><br/><br/>
+          ⚔️ The sword of Zayin is also the staff of Shabbat—the seventh day when we cease creating and receive divine nourishment. It teaches: true strength comes from knowing when to <em>stop</em> and receive.`,
+
+        'ח': `<strong>Chet (ח): Path Chesed to Tiferet</strong><br/>
+          <strong>Shape & Meaning:</strong> Chet is formed by two vertical lines (Zayins) connected by a bridge on top—like a gateway or courtyard.<br/>
+          <strong>Gematria:</strong> 8 - Life (חַי—chai), transcendence beyond the natural seven, fear/awe (חֵטְא suggests breaking through barriers)<br/>
+          <strong>Path:</strong> Sacred enclosure carrying Loving-kindness (Chesed) into Harmony (Tiferet)—the protective fence of love.<br/><br/>
+          📖 <strong>From Sefer HaBahir:</strong> "Why is the letter Chet (ח) open? Because all directions (רוּחוֹת—ruchot) are closed, except for the North, which is opened for good and for evil. From the North, harsh judgments can flow, but also great light when rectified."<br/>
+          <a href="https://www.sefaria.org/Sefer_HaBahir.35" target="_blank" style="color: #FFD700;">📚 Sefer HaBahir 35</a><br/><br/>
+          🏛️ Chet represents <em>חַי</em>—LIFE itself! It is the fence that creates sacred space, protecting the holy from the profane. Through this path, Chesed's boundless love finds its true expression in Tiferet's balanced beauty.`,
+        
+        'ט': `<strong>Tet (ט): Path Chochmah to Tiferet</strong><br/>
+          <strong>Shape & Meaning:</strong> Tet is curved inward, like a vessel that contains—or like a snake coiled.<br/>
+          <strong>Gematria:</strong> 9 - Hidden good (טוֹב—tov), pregnancy/gestation, the serpent (נָחָשׁ)<br/>
+          <strong>Path:</strong> Hidden goodness flowing from Wisdom (Chochmah) into Beauty (Tiferet)—concealed divine providence.<br/><br/>
+          📖 <strong>From the Bahir:</strong> "Tet—because it contains <em>goodness</em> (טוּב) that is hidden within. The first time Tet appears in Torah is in 'טוֹב' (good)—'And God saw that the light was <em>good</em>.' This good was hidden away for the righteous in the World to Come."<br/>
+          <a href="https://www.sefaria.org/Genesis.1.4" target="_blank" style="color: #FFD700;">📚 Genesis 1:4</a><br/><br/>
+          🐍 Tet is inverted—its opening faces inward, teaching that true goodness is <em>concealed</em>. Not all wisdom is immediately visible; some must be discovered within, like a treasure hidden in the heart.`,
+        
+        'י': `<strong>Yud (י): Path Tiferet to Netzach</strong><br/>
+          <strong>Shape & Meaning:</strong> Yud is the smallest letter—just a point, a seed, a hand.<br/>
+          <strong>Gematria:</strong> 10 - The ten Sefirot, completion, the hand (יָד—yad), emanation<br/>
+          <strong>Path:</strong> The divine <em>hand</em> extending Beauty (Tiferet) into Victory (Netzach)—active manifestation.<br/><br/>
+          📖 <strong>From Sefer Yetzirah:</strong> "<em>Ten</em> Sefirot Belimah—ten and not nine, ten and not eleven. Understand with Wisdom, be wise with Understanding." The Yud represents the totality of divine emanation in potential form.<br/>
+          <a href="https://www.sefaria.org/Sefer_Yetzirah.1.4" target="_blank" style="color: #FFD700;">📚 Sefer Yetzirah 1:4</a><br/><br/>
+          ✋ <strong>The Divine Hand:</strong> Yud is the first letter of God's Name (יהוה). It is the <em>point</em> from which all creation emerges—the seed containing the entire tree! Though smallest, it contains infinite potential.`,
+        
+        'כ': `<strong>Kaf (כ): Path Chesed to Netzach</strong><br/>
+          <strong>Shape & Meaning:</strong> Kaf is curved like a palm or a crown—open to receive or give.<br/>
+          <strong>Gematria:</strong> 20 - Crown (כֶּתֶר—keter), palm (כַּף—kaf), to bend/subdue<br/>
+          <strong>Path:</strong> The open palm of giving, flowing Loving-kindness (Chesed) into enduring Victory (Netzach).<br/><br/>
+          📖 <strong>From Psalms:</strong> "You open Your hand (כָּפֶךָ) and satisfy every living thing with favor."—God's palm is always open to give!<br/>
+          <a href="https://www.sefaria.org/Psalms.145.16" target="_blank" style="color: #FFD700;">📚 Psalms 145:16</a><br/><br/>
+          👑 Kaf has two forms: Kaf (כ) at the beginning/middle of a word is open and curved. Kaf Sofit (ך) at the end is straight and descending—teaching us that giving must sometimes be direct and decisive. True chesed empowers others toward their own victory.`,
+
+        'ל': `<strong>Lamed (ל): Path Hod to Yesod</strong><br/>
+          <strong>Shape & Meaning:</strong> Lamed towers above all other letters—it ascends like a tower reaching toward heaven.<br/>
+          <strong>Gematria:</strong> 30 - Learning/teaching (לִמּוּד—limud), heart (לֵב—lev), aspiration<br/>
+          <strong>Path:</strong> The aspiring heart connecting Humility (Hod) to Foundation (Yesod)—learning grounds glory.<br/><br/>
+          📖 <strong>From the Talmud:</strong> "Lamed stands for <em>Lev</em> (לֵב—heart) and <em>Lomed</em> (לוֹמֵד—one who learns). It is the tower reaching toward the King (Keter). A heart that truly learns reaches upward!"<br/>
+          <a href="https://www.sefaria.org/Shabbat.104a" target="_blank" style="color: #FFD700;">📚 Talmud Shabbat 104a</a><br/><br/>
+          📚 Lamed is the <em>only</em> letter that rises above the baseline—teaching that the heart of one who studies Torah soars beyond earthly limits. True learning (Hod's humility) creates the foundation (Yesod) for all spiritual growth.`,
+        
+        'מ': `<strong>Mem (מ): Path Netzach to Hod</strong><br/>
+          <strong>Shape & Meaning:</strong> Mem is closed (מ) or open (ם at end of word)—like water contained or flowing.<br/>
+          <strong>Gematria:</strong> 40 - Water (מַיִם—mayim), womb, transformation, the 40 days/years of testing<br/>
+          <strong>Path:</strong> The waters of transformation flowing between Victory (Netzach) and Glory (Hod)—dynamic balance.<br/><br/>
+          📖 <strong>From Sefer Yetzirah:</strong> "He made the letter Mem reign over Water, and He bound to it a crown. He combined them one with another. With them He sealed the <em>earth</em> in the World, <em>cold</em> in the Year, and the <em>belly</em> in the Person—the waters of the womb from which all life emerges."<br/>
+          <a href="https://www.sefaria.org/Sefer_Yetzirah.3.7" target="_blank" style="color: #FFD700;">📚 Sefer Yetzirah 3:7</a><br/><br/>
+          💧 <strong>Open and Closed Mem:</strong> The closed Mem (מ) is <em>hidden wisdom</em> (like the waters above). The open Mem Sofit (ם) is <em>revealed wisdom</em> (like the waters below). Together they teach: wisdom must flow yet be contained—giving and receiving in perfect balance.`,
+        
+        'נ': `<strong>Nun (נ): Path Netzach to Yesod</strong><br/>
+          <strong>Shape & Meaning:</strong> Nun is curved like a fish or bent like one who bows. Nun Sofit (ן) descends deep below the line.<br/>
+          <strong>Gematria:</strong> 50 - Fish (נוּן—nun), Jubilee (50th year), falling and rising, humility<br/>
+          <strong>Path:</strong> Continuous movement from Victory (Netzach) to Foundation (Yesod)—persistent flow of divine energy.<br/><br/>
+          📖 <strong>From Psalms:</strong> "The Lord upholds all who <em>fall</em> (נוֹפְלִים) and raises up all who are bowed down (כְּפוּפִים)." The Nun represents both the falling and the rising—the fish that swims continuously without stopping.<br/>
+          <a href="https://www.sefaria.org/Psalms.145.14" target="_blank" style="color: #FFD700;">📚 Psalms 145:14</a><br/><br/>
+          🐟 The nun-fish never sleeps, always moving in hidden waters. So too, divine providence constantly flows (Netzach) toward manifestation (Yesod), even when unseen. Nun teaches: even in falling, we are upheld by the Faithful One (נֶאֱמָן—ne'eman).`,
+        
+        'ס': `<strong>Samech (ס): Path Tiferet to Hod</strong><br/>
+          <strong>Shape & Meaning:</strong> Samech is a perfect circle or square—complete, supportive, protective.<br/>
+          <strong>Gematria:</strong> 60 - Support (סוֹמֵךְ—somech), to uphold, encircle<br/>
+          <strong>Path:</strong> Divine support flowing from Beauty (Tiferet) to Glory (Hod)—sustaining and upholding.<br/><br/>
+          📖 <strong>From Psalms:</strong> "The Lord <em>supports</em> (סוֹמֵךְ) all who fall and raises all who are bowed down." The Samech is God's supporting hand beneath us!<br/>
+          <a href="https://www.sefaria.org/Psalms.145.14" target="_blank" style="color: #FFD700;">📚 Psalms 145:14</a><br/><br/>
+          ⭕ Samech is the only letter with no opening—fully enclosed, representing God's complete protection. It teaches: when we acknowledge divine glory (Hod) flowing from divine beauty (Tiferet), we are surrounded by infinite support.`,
+
+        'ע': `<strong>Ayin (ע): Path Binah to Tiferet</strong><br/>
+          <strong>Shape & Meaning:</strong> Ayin looks like an eye with a dot (the pupil) and a stem—symbolizing vision and insight.<br/>
+          <strong>Gematria:</strong> 70 - Eye (עַיִן—ayin), the 70 nations, the 70 faces of Torah, wellspring (מַעְיָן—mayan)<br/>
+          <strong>Path:</strong> The discerning eye connecting Understanding (Binah) to Beauty (Tiferet)—perception that reveals harmony.<br/><br/>
+          📖 <strong>From Proverbs:</strong> "The eye is never satisfied with seeing." Yet the spiritual eye (Ayin) can perceive divine beauty (Tiferet) emerging from deep understanding (Binah).<br/>
+          <a href="https://www.sefaria.org/Proverbs.27.20" target="_blank" style="color: #FFD700;">📚 Proverbs 27:20</a><br/><br/>
+          👁️ Ayin also means "nothingness" (אַיִן)—teaching that true spiritual vision comes from emptying the ego. When we see with Binah's insight rather than surface perception, we behold Tiferet's truth. The 70 faces of Torah all converge in the One.`,
+        
+        'פ': `<strong>Peh (פ): Path Gevurah to Hod</strong><br/>
+          <strong>Shape & Meaning:</strong> Peh is an open mouth ready to speak. Peh Sofit (ף) descends, representing speech that goes inward.<br/>
+          <strong>Gematria:</strong> 80 - Mouth (פֶּה—peh), speech, expression, opening<br/>
+          <strong>Path:</strong> The mouth articulating Strength (Gevurah) into Glory (Hod)—disciplined speech becomes praise.<br/><br/>
+          📖 <strong>From Psalms:</strong> "Lord, open my lips (שְׂפָתַי תִּפְתָּח), and my <em>mouth</em> (פִּי) will declare Your praise." Speech must be opened by God—only then does Gevurah's judgment become Hod's glory.<br/>
+          <a href="https://www.sefaria.org/Psalms.51.17" target="_blank" style="color: #FFD700;">📚 Psalms 51:17</a><br/><br/>
+          🗣️ Peh teaches the power of words! Harsh speech (unrefined Gevurah) can wound, but when refined through humility (Hod), our words become vessels of divine glory. The Peh that descends (ף) represents speech that turns inward in contemplation before emerging as praise.`,
+        
+        'צ': `<strong>Tzadi (צ): Path Gevurah to Tiferet</strong><br/>
+          <strong>Shape & Meaning:</strong> Tzadi is formed by a Nun (נ) attached to a Yud (י)—the humble one bowing before the divine hand.<br/>
+          <strong>Gematria:</strong> 90 - Righteous one (צַדִּיק—tzadik), justice, fish-hook<br/>
+          <strong>Path:</strong> The righteous path from Strength (Gevurah) to Beauty (Tiferet)—justice perfected in balance.<br/><br/>
+          📖 <strong>From Proverbs:</strong> "The <em>righteous one</em> (צַדִּיק) is the foundation of the world." This is the path of the Tzadik who brings Gevurah's judgment into perfect harmony (Tiferet).<br/>
+          <a href="https://www.sefaria.org/Proverbs.10.25" target="_blank" style="color: #FFD700;">📚 Proverbs 10:25</a><br/><br/>
+          ⚖️ The Tzadik is one who has mastered the balance of judgment and compassion—using Gevurah's discipline not for harshness but for creating Tiferet's beauty. Like a fish-hook, the Tzadik draws souls upward toward the light.`,
+        
+        'ק': `<strong>Kuf (ק): Path Binah to Chesed</strong><br/>
+          <strong>Shape & Meaning:</strong> Kuf descends below the baseline—representing descent, holiness (קֹדֶשׁ—kodesh), or the back of the head.<br/>
+          <strong>Gematria:</strong> 100 - Holy (קָדוֹשׁ—kadosh), monkey (קוֹף—kof, one who imitates), call (קוֹל—kol)<br/>
+          <strong>Path:</strong> The challenging path from Understanding (Binah) to Loving-kindness (Chesed)—descending to uplift.<br/><br/>
+          📖 <strong>From Leviticus:</strong> "You shall be <em>holy</em> (קְדֹשִׁים), for I the Lord your God am holy (קָדוֹשׁ)." True holiness (Binah's discernment) overflows as boundless compassion (Chesed).<br/>
+          <a href="https://www.sefaria.org/Leviticus.19.2" target="_blank" style="color: #FFD700;">📚 Leviticus 19:2</a><br/><br/>
+          🐵 Kuf descends below the line—sometimes representing <em>kedushah</em> (holiness) that stoops low to raise others up, sometimes <em>kof</em> (monkey), the imitator who mimics without understanding. The path teaches: true Chesed emerges when Binah humbles itself, descending to meet those in need.`,
+        
+        'ר': `<strong>Resh (ר): Path Tiferet to Yesod</strong><br/>
+          <strong>Shape & Meaning:</strong> Resh is a rounded head without the leg of Dalet—representing a head turned or a person of poverty (רָאשׁ—rosh, head; רָשׁ—rash, poor).<br/>
+          <strong>Gematria:</strong> 200 - Head (רֹאשׁ—rosh), beginning (רֵאשִׁית—reishit), poverty, renewal<br/>
+          <strong>Path:</strong> The conscious choice flowing from Beauty (Tiferet) to Foundation (Yesod)—leading with the head.<br/><br/>
+          📖 <strong>From Genesis:</strong> "In the <em>beginning</em> (בְּרֵאשִׁית—bereishit)..." Resh is the head of creation, the renewal of purpose that grounds beauty into foundation.<br/>
+          <a href="https://www.sefaria.org/Genesis.1.1" target="_blank" style="color: #FFD700;">📚 Genesis 1:1</a><br/><br/>
+          👤 Resh turned one way is a <em>head</em> (leadership, renewal); turned another it is <em>poverty</em> (emptiness, need). This path teaches: true foundation (Yesod) requires bringing our highest consciousness (Tiferet) into every act—leading with wisdom, not ego.`,
+
+        'ש': `<strong>Shin (ש): Path Binah to Chochmah</strong><br/>
+          <strong>Shape & Meaning:</strong> Shin has three heads/flames reaching upward—representing fire, the divine Name, and the three pillars of the Tree.<br/>
+          <strong>Gematria:</strong> 300 - Fire (אֵשׁ—esh), tooth (שֵׁן—shen), one of the Three Mother Letters<br/>
+          <strong>Path:</strong> The blazing fire connecting Understanding (Binah) to Wisdom (Chochmah)—fusion of insight.<br/><br/>
+          📖 <strong>From Sefer Yetzirah:</strong> "He made the letter Shin reign over <em>Fire</em>, and He bound to it a crown. He combined them one with another. With them He sealed the <em>heavens</em> in the World, <em>heat</em> in the Year, and the <em>head</em> in the Person—the fire of divine wisdom that illuminates consciousness."<br/>
+          <a href="https://www.sefaria.org/Sefer_Yetzirah.3.8" target="_blank" style="color: #FFD700;">📚 Sefer Yetzirah 3:8</a><br/><br/>
+          🔥 <strong>Three Mother Letters:</strong> Along with Aleph (א—Air) and Mem (מ—Water), Shin (ש—Fire) forms the foundation of creation. Shin's three flames represent the three columns of the Tree: Right (Chesed), Left (Gevurah), and Center (Tiferet). When Binah (Understanding) and Chochmah (Wisdom) unite through Shin's fire, the blazing insight of <em>da'at</em> (knowledge) is born!<br/><br/>
+          ✡️ Shin appears on the mezuzah and tefillin, representing God's Name <em>Shaddai</em> (שַׁדַּי)—the Almighty who sets boundaries (שֶׁ־דַּי: "Who said 'Enough!'"). Fire that knows its limits becomes holy light.`,
+        
+        'ת': `<strong>Tav (ת): Path Yesod to Malchut</strong><br/>
+          <strong>Shape & Meaning:</strong> Tav is formed by a Dalet (ד) and Nun (נ) joined—representing judgment (דִּין—din) and humility (נָכוֹן—nachon) sealed together. It is the final letter, the seal.<br/>
+          <strong>Gematria:</strong> 400 - Truth (אֱמֶת—emet), mark/seal (תָּו—tav), completion<br/>
+          <strong>Path:</strong> The final seal connecting Foundation (Yesod) to Kingdom (Malchut)—actualizing all in reality.<br/><br/>
+          📖 <strong>From Ezekiel:</strong> "Go through the city and put a <em>mark</em> (תָּו—tav) on the foreheads of those who sigh and groan..." The Tav is God's seal of protection and truth!<br/>
+          <a href="https://www.sefaria.org/Ezekiel.9.4" target="_blank" style="color: #FFD700;">📚 Ezekiel 9:4</a><br/><br/>
+          ✍️ <strong>The Seal of Truth:</strong> The word <em>Emet</em> (אֱמֶת—truth) begins with Aleph (א), the first letter, includes Mem (מ) in the middle, and ends with Tav (ת)—spanning from beginning to end. But remove the Aleph (the Divine) and you have <em>Met</em> (מֵת—death). Only with God (Aleph) does the seal (Tav) carry true life!<br/><br/>
+          🌍 Tav completes the journey from Yesod (spiritual foundation) into Malchut (physical manifestation). Every divine emanation from the highest Crown (Keter) now becomes actual—sealed with the Tav of <em>truth</em> in this world. This is the final letter—the signature of Creation complete!`
+      };
+
+      // YOUR ORIGINAL SEFIROT MAP FOR KEYWORD DIAGNOSIS
+      const sefirotMap = [
+        {
+          name: "Keter",
+          keywords: ["no will", "empty", "directionless", "disconnected from hashem", "no purpose", "meaningless", "lost", "aimless"],
+          insight: `
+            👑 <strong>Keter Imbalance - Crown</strong><br/><br/>
+            <strong>Symptoms:</strong> Loss of purpose, apathy, disconnection from divine will<br/>
+            <strong>Animal Soul:</strong> Feeling empty, directionless<br/>
+            <strong>Godly Soul:</strong> Deep will (ratzon) and delight (oneg) in divine unity<br/><br/>
+            ✨ <strong>About Keter:</strong> The highest Sefirah, representing divine will, pure consciousness, and infinite light. It is the crown—the transcendent root of all Sefirot, containing both Will and Delight.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.1.15a" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar I:15a</a> - "Keter is the hidden will (ratzon), concealed and unknowable"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.1.1" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 1:1</a> - "Ten Sefirot of Nothingness—Keter is the first, beyond comprehension"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.106" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 106</a> - "The Crown is the will that preceded all thought"<br/><br/>
+            💡 <strong>Healing Path:</strong> Meditate on purpose. Accept inner stillness. Surrender to higher will. Click on the golden Keter sphere to learn more!
+          `
+        },
+        {
+          name: "Chochmah",
+          keywords: ["confused", "no insight", "mental block", "frozen", "can't think", "unclear", "foggy", "bewildered"],
+          insight: `
+            💡 <strong>Chochmah Imbalance - Wisdom</strong><br/><br/>
+            <strong>Symptoms:</strong> Confusion, mental blocks, lack of clarity, frozen thinking<br/>
+            <strong>Animal Soul:</strong> Rashness, impulsive actions without reflection<br/>
+            <strong>Godly Soul:</strong> Flash of divine insight, intuitive knowing, pure wisdom<br/><br/>
+            🌟 <strong>About Chochmah:</strong> The first flash of an idea, pure undifferentiated wisdom. It is the initial spark of creation, the point of emanation from Keter—the "Father" principle.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.1.31a" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar I:31a</a> - "Chochmah is the beginning point, the flash of insight beyond words"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.1.5" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 1:5</a> - "Flash of lightning—this is Chochmah"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.139" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 139</a> - "Wisdom (Chochmah) is the Father—the seed of all thought"<br/><br/>
+            💡 <strong>Healing Path:</strong> Contemplate Divine ideas. Ground insights in quiet reflection. Study Torah. Be open to sudden revelation. Click on the golden Chochmah sphere to explore deeper!
+          `
+        },
+        {
+          name: "Binah",
+          keywords: ["overthinking", "mental loops", "no understanding", "too much logic", "anxiety", "analysis paralysis", "worried", "stressed", "obsessing"],
+          insight: `
+            🧠 <strong>Binah Imbalance - Understanding</strong><br/><br/>
+            <strong>Symptoms:</strong> Overthinking, mental loops, excessive analysis, anxiety<br/>
+            <strong>Animal Soul:</strong> Over-analysis, rigidity, critical mindset<br/>
+            <strong>Godly Soul:</strong> Discernment, deep understanding, teshuvah (return)<br/><br/>
+            🕊️ <strong>About Binah:</strong> The expansion of Chochmah into detailed understanding, giving form and structure. It represents divine motherly nurturing, discernment—the "Mother" principle forming the intellectual triad with Keter and Chochmah.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.2.63b" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar II:63b</a> - "Binah is the palace where wisdom takes form"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.1.4" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 1:4</a> - "Understand with Wisdom, be wise with Understanding"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.141" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 141</a> - "Binah is the Mother—giving form to the Father's seed"<br/><br/>
+            💡 <strong>Healing Path:</strong> Practice compassion toward yourself. Reflect before reacting. Use reason WITH mercy. Breathe. Click on the golden Binah sphere for more guidance!
+          `
+        },
+        {
+          name: "Chesed",
+          keywords: ["codependent", "no boundaries", "giving too much", "doormat", "people pleasing", "overgiving", "enabling", "can't say no"],
+          insight: `
+            💙 <strong>Chesed Imbalance - Loving-kindness</strong><br/><br/>
+            <strong>Symptoms:</strong> Codependency, giving to a fault, lack of boundaries, people-pleasing<br/>
+            <strong>Animal Soul:</strong> Enabling, giving from fear or guilt<br/>
+            <strong>Godly Soul:</strong> Pure expansive love, boundless grace, divine generosity<br/><br/>
+            💖 <strong>About Chesed:</strong> Expansive love, boundless grace, mercy, and benevolence. The outpouring of divine goodness extending without limit—the "Greatness" of God.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.2.162a" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar II:162a</a> - "Chesed is the right arm—extending without measure"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.3.5" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 3:5</a> - "Water flows from Chesed—blessing all creation"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.115" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 115</a> - "Chesed without Gevurah leads to chaos"<br/><br/>
+            💡 <strong>Healing Path:</strong> Give from love, not fear. Let giving be guided by light, not guilt. Balance Chesed with Gevurah's boundaries. Click the golden Chesed sphere to learn more!
+          `
+        },
+        {
+          name: "Gevurah",
+          keywords: ["anger", "rage", "harsh", "judgment", "critical", "control", "rigid", "frustrated", "impatient", "mean", "aggressive", "temper", "bad temper", "explosive", "irritable", "hostile", "furious"],
+          insight: `
+            ⚡ <strong>Gevurah Imbalance - Strength/Justice</strong><br/><br/>
+            <strong>Symptoms:</strong> Harshness, anger, excessive judgment, need for control<br/>
+            <strong>Animal Soul:</strong> Rage, criticism, suppression<br/>
+            <strong>Godly Soul:</strong> Holy boundaries, discernment, strength with discipline<br/><br/>
+            🛡️ <strong>About Gevurah:</strong> Restraint, discipline, judgment, and severity. It limits Chesed, providing structure for balance and justice in creation—the "Might" of God.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.2.23b" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar II:23b</a> - "Gevurah is the left arm—restraining and limiting with holy fire"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.3.6" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 3:6</a> - "Fire reigns in Gevurah—purifying through restriction"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.162" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 162</a> - "Without Gevurah, Chesed would overflow—boundaries create vessels"<br/><br/>
+            💡 <strong>Healing Path:</strong> Set firm YET loving boundaries. Channel strength toward justice, not control. Balance judgment with compassion. Click the golden Gevurah sphere for deeper wisdom!
+          `
+        },
+        {
+          name: "Tiferet",
+          keywords: ["disconnected from truth", "emotional chaos", "self-neglect", "unbalanced", "no center", "heartbroken", "sad", "depressed", "depression", "lonely", "despair", "hopeless", "empty inside"],
+          insight: `
+            ✨ <strong>Tiferet Imbalance - Beauty/Harmony</strong><br/><br/>
+            <strong>Symptoms:</strong> Disconnection from truth, emotional chaos, lack of center<br/>
+            <strong>Animal Soul:</strong> Self-neglect, inner contradiction<br/>
+            <strong>Godly Soul:</strong> Harmony, compassion, truth, perfect balance<br/><br/>
+            🌞 <strong>About Tiferet:</strong> The central Sefirah! Harmony, compassion, truth, and balance. It reconciles Chesed and Gevurah—the "Son" or "King" principle, representing the beauty of God's perfect balance.<br/><br/>
+            � <strong>Why Tiferet Relates to Depression/Sadness:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.3.231b" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar, Parashat Pinchas</a> - "When Tiferet is darkened, the heart is broken and joy departs"<br/>
+            • <a href="https://www.sefaria.org/Tanya,_Iggeret_HaKodesh.11" target="_blank" style="color: #FFD700; text-decoration: underline;">Tanya, Iggeret HaKodesh Ch. 11</a> - Depression comes from disconnection to one's divine center (Tiferet)<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.1.4" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 1:4</a> - The heart corresponds to Tiferet, the seat of emotions<br/>
+            • <a href="https://www.sefaria.org/Etz_Chaim,_Shaar_HaKlalim.3" target="_blank" style="color: #FFD700; text-decoration: underline;">Etz Chaim, Shaar HaKlalim Ch. 3</a> - Tiferet balances all emotions; its imbalance causes sadness<br/><br/>
+            💡 <strong>Practical Healing Steps:</strong><br/>
+            1. <strong>Center yourself:</strong> Daily heart-focused meditation—place hand on heart, breathe, feel your divine spark<br/>
+            2. <strong>Balance opposites:</strong> Practice giving (Chesed) and receiving (Gevurah) equally<br/>
+            3. <strong>Study Torah:</strong> Called "Etz Chaim" (Tree of Life)—connects directly to Tiferet<br/>
+            4. <strong>Sunlight exposure:</strong> Sun is Tiferet's planet—15 minutes daily in morning light<br/>
+            5. <strong>Truth practice:</strong> Journal one honest feeling daily—Tiferet is the Sefirah of truth (Emet)<br/><br/>
+            🌳 <strong>Next Step:</strong> Click the golden Tiferet sphere at the heart of the Tree for full wisdom!
+          `
+        },
+        {
+          name: "Netzach",
+          keywords: ["quitting", "defeated", "can't keep going", "burned out", "giving up", "lazy", "procrastinating", "unmotivated", "no energy", "tired", "exhausted"],
+          insight: `
+            🔥 <strong>Netzach Imbalance - Victory/Endurance</strong><br/><br/>
+            <strong>Symptoms:</strong> Wanting to quit, feeling defeated, burnout, loss of persistence<br/>
+            <strong>Animal Soul:</strong> Ego-driven domination or complete collapse<br/>
+            <strong>Godly Soul:</strong> Holy endurance, perseverance, victory through faith<br/><br/>
+            🥇 <strong>About Netzach:</strong> Endurance, perseverance, victory, and divine triumph. The drive to overcome obstacles and achieve goals—the "Eternity" of God.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.3.75a" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar III:75a</a> - "Netzach is the eternal flow—never ceasing, always persevering"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.4.6" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 4:6</a> - "The right leg is Netzach—moving forward with strength"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.189" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 189</a> - "Victory comes from unending faith"<br/><br/>
+            💡 <strong>Healing Path:</strong> Embrace sacred discipline. Align will with eternity. Trust your path. Click the golden Netzach sphere to renew your strength!
+          `
+        },
+        {
+          name: "Hod",
+          keywords: ["shame", "self-hate", "doubt", "can't receive", "collapsed", "guilt"],
+          insight: `
+            🌈 <strong>Hod Imbalance - Glory/Humility</strong><br/><br/>
+            <strong>Symptoms:</strong> Shame, self-hatred, doubt, inability to receive, guilt<br/>
+            <strong>Animal Soul:</strong> Low self-worth, false humility, denial<br/>
+            <strong>Godly Soul:</strong> Gratitude, true humility, surrender to the Divine<br/><br/>
+            📿 <strong>About Hod:</strong> Humility, surrender, resonance, and divine glory. The receptive counterpart to Netzach, acknowledging the source of power—the "Glory" of God.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.1.249a" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar I:249a</a> - "Hod is the echo of divine glory—receptive and grateful"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.4.7" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 4:7</a> - "The left leg is Hod—yielding in gratitude"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.193" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 193</a> - "Glory comes through surrender to the Source"<br/><br/>
+            💡 <strong>Healing Path:</strong> Honor your voice. Practice gratitude. Bow to the Divine, not to shame. Click the golden Hod sphere for healing wisdom!
+          `
+        },
+        {
+          name: "Yesod",
+          keywords: ["scattered", "leaking energy", "unhealthy attachments", "disconnected", "integrity"],
+          insight: `
+            💎 <strong>Yesod Imbalance - Foundation</strong><br/><br/>
+            <strong>Symptoms:</strong> Scattered energy, unhealthy attachments, emotional leakage<br/>
+            <strong>Animal Soul:</strong> Dispersed focus, broken integrity<br/>
+            <strong>Godly Soul:</strong> Sacred bonding, channeled energy, foundation of truth<br/><br/>
+            🌙 <strong>About Yesod:</strong> Connection, foundation, bonding, and transmission of divine energy to Malchut. The channel through which all preceding Sefirot flow into manifestation—the "Foundation" of all existence.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.1.59a" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar I:59a</a> - "Yesod is the righteous one (tzadik)—foundation of the world"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.1.8" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 1:8</a> - "Foundation binds all Sefirot—the covenant of connection"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.172" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 172</a> - "Through Yesod, all flows from heaven to earth"<br/><br/>
+            💡 <strong>Healing Path:</strong> Create holy connections. Strengthen personal integrity. Channel energy toward truth. Click the golden Yesod sphere to ground yourself!
+          `
+        },
+        {
+          name: "Malchut",
+          keywords: ["powerless", "unseen", "disconnected from action", "passive", "no voice"],
+          insight: `
+            👑🌍 <strong>Malchut Imbalance - Kingdom/Presence</strong><br/><br/>
+            <strong>Symptoms:</strong> Feeling powerless, unseen, unable to act or manifest<br/>
+            <strong>Animal Soul:</strong> Passivity, victimhood<br/>
+            <strong>Godly Soul:</strong> Divine feminine presence (Shekhinah), receptivity with dignity<br/><br/>
+            🌍 <strong>About Malchut:</strong> The physical world, manifest reality, and the divine feminine presence (Shekhinah). The culmination of all divine emanations, where divinity is experienced in creation—the "Kingdom" of God.<br/><br/>
+            � <strong>Sacred Sources:</strong><br/>
+            • <a href="https://www.sefaria.org/Zohar.1.21a" target="_blank" style="color: #FFD700; text-decoration: underline;">Zohar I:21a</a> - "Malchut is the Shekhinah—divine presence dwelling in the world"<br/>
+            • <a href="https://www.sefaria.org/Sefer_Yetzirah.1.13" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer Yetzirah 1:13</a> - "Earth is Malchut—where heaven and earth unite"<br/>
+            • <a href="https://www.sefaria.org/Sefer_HaBahir.22" target="_blank" style="color: #FFD700; text-decoration: underline;">Sefer HaBahir 22</a> - "The Kingdom receives all light and reflects it back"<br/><br/>
+            💡 <strong>Healing Path:</strong> Step into spiritual leadership. Receive with dignity. Speak your truth. Take grounded action. Embody divine presence in this world. Click the golden Malchut sphere at the base of the Tree!
+          `
+        },
+        {
+          name: "Genesis 3:22",
+          keywords: ["tree of life", "live forever", "genesis 3:22"],
+          insight: `
+            📖 <strong>Genesis 3:22 - The Tree of Life</strong><br/><br/>
+            "And the Lord God said, 'Behold, the man is become as one of us, to know good and evil; and now, lest he put forth his hand, and take also of the tree of life, and eat, and live forever..."<br/><br/>
+            🌳 <strong>Sefirah Connection:</strong> <strong>Yesod</strong> (Foundation) and <strong>Malchut</strong> (Kingdom/Shekhinah)<br/><br/>
+            In Jewish mystical tradition, the <strong>Tree of Life</strong> is the structure of the Sefirot, especially the central column (Keter → Tiferet → Yesod → Malchut).<br/><br/>
+            - <strong>Yesod</strong> channels divine energy from above into the world below — it is the <em>tzadik</em>, the foundation of the world.<br/>
+            - <strong>Malchut</strong> is the vessel and final receiver of all divine influence — the realm of manifestation and presence.<br/><br/>
+            🍃 <strong>Insight:</strong> After the sin, access to eternal life (the pure, direct flow from Yesod to Malchut) was cut off. The unity was fractured.<br/><br/>
+            🕯️ <strong>Healing:</strong> Restoration of this flow comes through rectifying Yesod (foundation, purity) and elevating Malchut (faithful presence) to once again receive from the Tree of Life.
+          `
+        }
+      ];
+
+      // DIAGNOSTIC FUNCTION - USES YOUR SEFIROT MAP AND ALEPH-BET
+      function diagnoseSefirah(userInput) {
+        const input = userInput.toLowerCase();
+        
+        // First check for Hebrew letters (Aleph-Bet)
+        const hebrewLetterNames = {
+          'aleph': 'א', 'alef': 'א',
+          'bet': 'ב', 'beit': 'ב', 'vet': 'ב',
+          'gimmel': 'ג', 'gimel': 'ג',
+          'dalet': 'ד', 'daled': 'ד',
+          'heh': 'ה', 'hey': 'ה', 'he': 'ה',
+          'vav': 'ו', 'vov': 'ו', 'waw': 'ו',
+          'zayin': 'ז',
+          'chet': 'ח', 'het': 'ח', 'khet': 'ח',
+          'tet': 'ט',
+          'yud': 'י', 'yod': 'י',
+          'kaf': 'כ', 'chaf': 'כ',
+          'lamed': 'ל',
+          'mem': 'מ',
+          'nun': 'נ',
+          'samech': 'ס', 'samekh': 'ס',
+          'ayin': 'ע', 'ayn': 'ע',
+          'peh': 'פ', 'pey': 'פ', 'feh': 'פ',
+          'tzadi': 'צ', 'tsadi': 'צ', 'tzadik': 'צ',
+          'kuf': 'ק', 'quf': 'ק', 'kof': 'ק',
+          'resh': 'ר', 'reish': 'ר',
+          'shin': 'ש',
+          'taf': 'ת', 'tav': 'ת'
+        };
+        
+        // Check if user is asking about a Hebrew letter
+        for (let [name, letter] of Object.entries(hebrewLetterNames)) {
+          if (input.includes(name) || input.includes(letter)) {
+            if (contentMapAlephBet[letter]) {
+              return contentMapAlephBet[letter];
+            }
+          }
+        }
+        
+        // Then check for Sefirot keywords
+        for (let sefirah of sefirotMap) {
+          if (sefirah.keywords.some(kw => input.includes(kw))) {
+            return sefirah.insight;
+          }
+        }
+        // If no keyword match, return a specific string to signal fallback
+        return "NO_DIAGNOSIS_MATCH";
+      }
+
+      // Function to handle chatbot responses using LLM - Primary: Gemini, Backup: ChatGPT, Final Fallback: Local
+      async function getBotResponse(userMessage) {
+        chatbotLoading.classList.remove("hidden"); // Show loading indicator
+        
+        // Try Gemini first
+        const geminiResponse = await tryGeminiAPI(userMessage);
+        if (geminiResponse !== null) {
+          chatbotLoading.classList.add("hidden");
+          return geminiResponse;
+        }
+        
+        // If Gemini fails, fallback to ChatGPT
+        console.log("Gemini failed, falling back to ChatGPT...");
+        const chatGPTResponse = await tryChatGPTAPI(userMessage);
+        if (chatGPTResponse !== null) {
+          chatbotLoading.classList.add("hidden");
+          return chatGPTResponse;
+        }
+        
+        // If both APIs fail (local development), provide local response
+        console.log("Both APIs failed, using local fallback...");
+        chatbotLoading.classList.add("hidden");
+        return getLocalFallbackResponse(userMessage);
+      }
+      
+      // Local fallback for development when APIs aren't available
+      function getLocalFallbackResponse(userMessage) {
+        const lowerMessage = userMessage.toLowerCase();
+        
+        // First, try the keyword diagnosis system - this is your core feature!
+        const diagnosisResult = diagnoseSefirah(userMessage);
+        if (diagnosisResult !== "NO_DIAGNOSIS_MATCH") {
+          return diagnosisResult;
+        }
+        
+        // Smart pattern matching for common struggles
+        if (lowerMessage.match(/\b(i'?m?|i am|feeling|feel)\s+(lazy|tired|exhausted|unmotivated|procrastinat|no energy)\b/)) {
+          // Find Netzach in sefirotMap
+          const netzach = sefirotMap.find(s => s.name === "Netzach");
+          if (netzach) return netzach.insight;
+        }
+        
+        if (lowerMessage.match(/\b(angry|mad|furious|irritated|annoyed|rage|temper|hostile|aggressive)\b/)) {
+          const gevurah = sefirotMap.find(s => s.name === "Gevurah");
+          if (gevurah) return gevurah.insight;
+        }
+        
+        if (lowerMessage.match(/\b(sad|depressed|down|unhappy|heartbroken)\b/)) {
+          const tiferet = sefirotMap.find(s => s.name === "Tiferet");
+          if (tiferet) return tiferet.insight;
+        }
+        
+        if (lowerMessage.match(/\b(anxious|worried|stress|panic)\b/)) {
+          const binah = sefirotMap.find(s => s.name === "Binah");
+          if (binah) return binah.insight;
+        }
+        
+        // Check for sacred text queries
+        if (lowerMessage.includes('zohar') || lowerMessage.includes('male and female') || lowerMessage.includes('unity')) {
+          return `📖 <strong>From the Zohar:</strong><br/>"Male and female He created them—any image where male and female are not found is not a high image... In any place where male and female are not found as one, The Holy One does not rest His dwelling in that place. And blessings are not found except in a place where male and female are found."<br/><br/>✨ <strong>What this means for you:</strong><br/>This teaches us about divine unity and balance - just as the Sefirot need both masculine and feminine energies (like Chesed and Gevurah, or Netzach and Hod), so too does spiritual wholeness require integration of all aspects of ourselves.<br/><br/>🌟 <strong>Practical steps:</strong><br/>1. Explore <strong>Chesed</strong> (loving-kindness) and <strong>Gevurah</strong> (discipline) on the Tree<br/>2. Notice how they balance each other - too much mercy without boundaries is chaos<br/>3. Ask me: "What's the balance between Chesed and Gevurah?"<br/><br/>📚 <a href="https://www.sefaria.org/Zohar" target="_blank" style="color: #FFD700; text-decoration: underline;">Read more from the Zohar on Sefaria →</a>`;
+        }
+        
+        if (lowerMessage.includes('sefer yetzirah') || lowerMessage.includes('letters') || lowerMessage.includes('creation')) {
+          return `📖 <strong>From Sefer Yetzirah:</strong><br/>"Twenty-Two Letters of Foundation—He carved them, and hewed them, and weighed them, and exchanged them, and combined them, and formed with them the soul of every formed being and the soul of every being He has yet to form."<br/><br/>💫 <strong>What this means for you:</strong><br/>The Hebrew letters you see on the Tree are not just symbols - they are the very tools through which God created reality! Each letter is a creative force that shapes existence.<br/><br/>🌟 <strong>Explore the letters:</strong><br/>1. Click on any Hebrew letter (א ב ג...) on the paths between Sefirot<br/>2. Learn about its shape, gematria value, and mystical meaning<br/>3. Try asking: "Tell me about Alef" or "What is the shape of Bet?"<br/><br/>📚 <a href="https://www.sefaria.org/Sefer_Yetzirah" target="_blank" style="color: #FFD700; text-decoration: underline;">Study Sefer Yetzirah on Sefaria →</a>`;
+        }
+        
+        if (lowerMessage.includes('sefer habahir') || lowerMessage.includes('bahir') || lowerMessage.includes('tree planted')) {
+          return `📖 <strong>From Sefer HaBahir:</strong><br/>"I am the One who planted this tree in order that all the world should delight in it. And in it, I spread All. I called it All because all depend upon it, all emanate from it, and all need it. To it they look, for it they wait, and from it, souls fly in joy."<br/><br/>🌳 <strong>What this means for you:</strong><br/>This IS the Tree of Life you're exploring right now! Every Sefirah (golden sphere) contains divine wisdom, and the entire structure is designed for your spiritual growth and delight.<br/><br/>🌟 <strong>Start your journey:</strong><br/>1. Click on <strong>Keter</strong> (Crown) at the top - the source of infinite light<br/>2. Move down to <strong>Tiferet</strong> (Beauty) in the center - the heart of the Tree<br/>3. Explore <strong>Malchut</strong> (Kingdom) at the bottom - where heaven meets earth<br/>4. Ask me: "I'm feeling lost" or "I need guidance" for personalized wisdom<br/><br/>📚 <a href="https://www.sefaria.org/Sefer_HaBahir" target="_blank" style="color: #FFD700; text-decoration: underline;">Study Sefer HaBahir on Sefaria →</a>`;
+        }
+        
+        if (lowerMessage.includes('three mothers') || lowerMessage.includes('alef') || lowerMessage.includes('mem') || lowerMessage.includes('shin')) {
+          return `📖 <strong>The Three Mother Letters (Sefer Yetzirah):</strong><br/><br/>🌬️ <strong>Alef (א)</strong> - Wind/Air: "He sealed the Wind in the world, and satiation in the Year, and the chest in the Person."<br/><br/>💧 <strong>Mem (מ)</strong> - Water: "He sealed the earth in the World, and cold in the Year, and the belly in the Person."<br/><br/>🔥 <strong>Shin (ש)</strong> - Fire: "He sealed the heavens in the World, and heat in the Year, and the head in the Person."<br/><br/>🌟 <strong>What this means for you:</strong><br/>These three letters form the foundation of all creation! They represent the three elements that make up reality itself - Air (balance), Water (flow), and Fire (transformation).<br/><br/>💫 <strong>Find them on the Tree:</strong><br/>1. Look for the Hebrew letters א מ ש on the paths connecting the Sefirot<br/>2. Click on each one to learn its full mystical meaning<br/>3. Try asking: "Tell me about Alef" or "What does Shin represent?"<br/><br/>📚 <a href="https://www.sefaria.org/Sefer_Yetzirah.3" target="_blank" style="color: #FFD700; text-decoration: underline;">Study the Three Mothers on Sefaria →</a>`;
+        }
+        
+        // Check for Sefirot mentions with full content
+        const sefirotResponses = {
+          'keter': contentMapSefirah['Keter'],
+          'chochmah': contentMapSefirah['Chochmah'],
+          'binah': contentMapSefirah['Binah'],
+          'chesed': contentMapSefirah['Chesed'],
+          'gevurah': contentMapSefirah['Gevurah'],
+          'tiferet': contentMapSefirah['Tiferet'],
+          'netzach': contentMapSefirah['Netzach'],
+          'hod': contentMapSefirah['Hod'],
+          'yesod': contentMapSefirah['Yesod'],
+          'malchut': contentMapSefirah['Malchut'],
+          'malkuth': contentMapSefirah['Malchut']
+        };
+        
+        for (const [key, response] of Object.entries(sefirotResponses)) {
+          if (lowerMessage.includes(key)) {
+            return response + '<br/><br/>💡 <em>Click on the golden sphere to explore more, or ask me about specific struggles to find which Sefirah can help you!</em>';
+          }
+        }
+        
+        // Emotional keyword matching from sefirotMap
+        const emotionalKeywords = {
+          'confused': sefirotMap[1].insight,
+          'mental block': sefirotMap[1].insight,
+          'overthinking': sefirotMap[2].insight,
+          'anxiety': sefirotMap[2].insight,
+          'sad': sefirotMap[3].insight,
+          'lonely': sefirotMap[3].insight,
+          'depressed': sefirotMap[3].insight,
+          'anger': sefirotMap[4].insight,
+          'rage': sefirotMap[4].insight,
+          'harsh': sefirotMap[4].insight,
+          'heartbroken': sefirotMap[5].insight,
+          'compassion': sefirotMap[5].insight,
+          'quitting': sefirotMap[6].insight,
+          'defeated': sefirotMap[6].insight,
+          'burnout': sefirotMap[6].insight,
+          'shame': sefirotMap[7].insight,
+          'doubt': sefirotMap[7].insight,
+          'guilt': sefirotMap[7].insight
+        };
+        
+        for (const [keyword, insight] of Object.entries(emotionalKeywords)) {
+          if (lowerMessage.includes(keyword)) {
+            return insight + '<br/><br/>🌿 <em>The Tree of Life offers healing for every soul-wound. Keep exploring!</em>';
+          }
+        }
+        
+        // Generic helpful responses
+        if (lowerMessage.includes('help') || lowerMessage.includes('guide')) {
+          return '🌿 Shalom! I\'m your Mystic Guide through the Tree of Life. I can help you:<br/><br/>✨ <strong>Understand the Sefirot</strong> - Ask about any Sefirah like "Tell me about Tiferet"<br/>📖 <strong>Share Sacred Wisdom</strong> - From the Zohar, Sefer Yetzirah, and Sefer HaBahir<br/>💫 <strong>Diagnose Soul Imbalances</strong> - Tell me what you\'re struggling with (anger, confusion, sadness, etc.)<br/>🔤 <strong>Explain Hebrew Letters</strong> - Ask about any of the 22 letters on the paths<br/><br/>Click on the golden Sefirot or Hebrew letters to explore their mysteries!';
+        }
+        
+        if (lowerMessage.includes('struggling') || lowerMessage.includes('problem') || lowerMessage.includes('issue')) {
+          return '💙 I hear you. The Tree of Life is here to help heal soul-wounds. Tell me more specifically:<br/><br/>• Are you feeling confused, stuck, or blocked? (Chochmah/Binah)<br/>• Struggling with anger or being too harsh? (Gevurah)<br/>• Feeling sad, heartbroken, or disconnected? (Tiferet)<br/>• Experiencing shame or self-doubt? (Hod)<br/>• Feel like giving up or burned out? (Netzach)<br/><br/>Or just tell me in your own words what you\'re going through, and I\'ll identify which Sefirah needs attention. 🌿';
+        }
+        
+        // Default response with invitation to explore
+        return `🌿 <strong>Shalom!</strong> Welcome to the Tree of Life - your guide to Kabbalistic wisdom.<br/><br/>🌟 <strong>What you can explore:</strong><br/><br/>📿 <strong>The 10 Sefirot (Golden Spheres):</strong><br/>• Ask: "What is Chesed?" or "Tell me about Tiferet"<br/>• Click on any golden sphere to see its full wisdom<br/>• Each contains angels, constellations, and divine attributes<br/><br/>🔤 <strong>The 22 Hebrew Letters (Paths):</strong><br/>• Ask: "What does the letter Alef mean?" or "Tell me about Bet"<br/>• Click any Hebrew letter (א ב ג...) to learn its shape and gematria<br/>• Discover teachings from Sefer Yetzirah and Sefer HaBahir<br/><br/>💬 <strong>Personal Guidance:</strong><br/>• Share how you feel: "I'm feeling confused", "I struggle with anger", "I'm feeling lazy"<br/>• Get personalized wisdom matched to your needs<br/><br/>📚 <strong>Sacred Texts:</strong><br/>• Ask about: "The Zohar", "Sefer Yetzirah", "Sefer HaBahir", "Three Mother Letters"<br/>• Get clickable links to study more on Sefaria<br/><br/>✨ <em>Start anywhere - the Tree will guide you!</em> 🌳<br/><br/><small>💡 Note: Full AI wisdom available when deployed online - but all sacred teachings are built-in!</small>`;
+      }
+
+      // Primary API: Google Gemini via Netlify Function
+      async function tryGeminiAPI(userMessage) {
+        try {
+          const response = await fetch('/api/gemini', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input: userMessage })
+          });
+
+          if (!response.ok) {
+            console.error("Gemini API Error:", response.status, response.statusText);
+            return null; // Signal failure to try backup
+          }
+
+          const result = await response.json();
+          if (result.candidates && result.candidates.length > 0 &&
+              result.candidates[0].content && result.candidates[0].content.parts &&
+              result.candidates[0].content.parts.length > 0) {
+            return result.candidates[0].content.parts[0].text;
+          } else {
+            console.error("Unexpected Gemini response structure:", result);
+            return null;
+          }
+        } catch (error) {
+          console.error("Error calling Gemini API:", error);
+          return null; // Signal failure to try backup
+        }
+      }
+
+      // Backup API: OpenAI ChatGPT via Netlify Function
+      async function tryChatGPTAPI(userMessage) {
+        try {
+          const response = await fetch('/api/chatgpt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input: userMessage })
+          });
+
+          if (!response.ok) {
+            console.error("ChatGPT API Error:", response.status, response.statusText);
+            return null; // Signal failure to use local fallback
+          }
+
+          const result = await response.json();
+          if (result.message) {
+            return result.message;
+          } else {
+            console.error("Unexpected ChatGPT response structure:", result);
+            return null;
+          }
+        } catch (error) {
+          console.error("Error calling ChatGPT API:", error);
+          return null; // Signal failure to use local fallback
+        }
+      }
+
+      // Event listener for chat input - now handles both diagnostic and LLM responses
+      if (chatInput && chatContent) {
+        chatInput.addEventListener("keydown", async (event) => {
+          if (event.key === "Enter") {
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+
+            const userMsg = document.createElement("div");
+            userMsg.textContent = "🗣️ You: " + msg;
+            chatContent.appendChild(userMsg);
+            chatInput.value = ''; // Clear input immediately
+
+            const botPlaceholder = document.createElement("div");
+            botPlaceholder.classList.add("mt-1"); // Start with no italic/gray for easier replacement
+            botPlaceholder.innerHTML = " Mystic Guide is thinking..."; // Will be replaced
+
+            chatContent.appendChild(botPlaceholder);
+            chatContent.scrollTop = chatContent.scrollHeight; // Scroll to bottom
+
+            // Attempt rule-based diagnosis first
+            let botResponseText = diagnoseSefirah(msg);
+
+            if (botResponseText === "NO_DIAGNOSIS_MATCH") {
+              // If no diagnosis, use LLM
+              botPlaceholder.innerHTML = `<span class="text-gray-500 italic"> Mystic Guide is thinking...</span>`; // Show thinking state for LLM
+              botResponseText = await getBotResponse(msg);
+            } else {
+                // If a diagnosis was made, remove thinking message or ensure it wasn't added for this path
+                chatbotLoading.classList.add("hidden"); // Ensure loading is hidden for instant responses
+            }
+
+            // Update the bot's reply
+            botPlaceholder.innerHTML = `🌿 Mystic Guide: ${botResponseText}`;
+            botPlaceholder.classList.remove("text-gray-500", "italic"); // Remove thinking style
+            chatContent.scrollTop = chatContent.scrollHeight; // Scroll to bottom again
+          }
+        });
+      }
+
+      // Toggle chat popup
+      const guideLeaf = document.getElementById('guideLeaf');
+      const chatPopup = document.getElementById('chat-popup');
+      if (guideLeaf && chatPopup) {
+        guideLeaf.addEventListener('click', () => {
+          chatPopup.classList.toggle('hidden');
+        });
+      }
+
+      // Sefirah click handlers
+      document.querySelectorAll('.sefira').forEach(element => {
+        const name = element.getAttribute("data-name");
+        element.innerHTML = `<span class='text-white font-bold text-sm'>${name}</span>`;
+        element.addEventListener('click', () => {
+          if (currentOpen === `sefira-${name}`) { // Differentiate between Sefirah and Aleph-Bet
+            popupBox.classList.add("hidden");
+            currentOpen = null;
+          } else {
+            popupText.innerHTML = contentMapSefirah[name] || `${name} info coming soon.`;
+            popupBox.classList.remove("hidden");
+            currentOpen = `sefira-${name}`;
+          }
+        });
+      });
+
+      // Aleph-Bet click handlers
+      document.querySelectorAll('.aleph-bet').forEach(element => {
+        const letter = element.getAttribute("data-letter");
+        element.addEventListener('click', () => {
+          if (currentOpen === `letter-${letter}`) { // Differentiate between Sefirah and Aleph-Bet
+            popupBox.classList.add("hidden");
+            currentOpen = null;
+          } else {
+            popupText.innerHTML = contentMapAlephBet[letter] || `${letter} info coming soon.`;
+            popupBox.classList.remove("hidden");
+            currentOpen = `letter-${letter}`;
+          }
+        });
+      });
+    });
+    // END OF CHATBOT AND INTERACTIVITY JAVASCRIPT CODE
+  </script>
+</head>
+<body class="bg-cover bg-no-repeat bg-center font-serif" style="background-image: url('tree-of-life.webp');">
+  <div class="background-stars"></div> <div class="dragonfly dragonfly-1"></div>
+<div class="dragonfly dragonfly-2"></div>
+<div class="dragonfly dragonfly-3"></div>
+
+  <div id="app" class="relative flex flex-col items-center justify-center min-h-screen p-4">
+    <div class="sefira absolute" style="top: 6%; left: 50%; transform: translate(-50%, -50%);" data-name="Keter">Keter</div>
+    <div class="sefira absolute" style="top: 12%; left: 70%; transform: translate(-50%, -50%);" data-name="Chochmah">Chochmah</div>
+    <div class="sefira absolute" style="top: 12%; left: 30%; transform: translate(-50%, -50%);" data-name="Binah">Binah</div>
+    <div class="sefira absolute" style="top: 28%; left: 65%; transform: translate(-50%, -50%);" data-name="Chesed">Chesed</div>
+    <div class="sefira absolute" style="top: 28%; left: 35%; transform: translate(-50%, -50%);" data-name="Gevurah">Gevurah</div>
+    <div class="sefira absolute" style="top: 36%; left: 50%; transform: translate(-50%, -50%);" data-name="Tiferet">Tiferet</div>
+    <div class="sefira absolute" style="top: 54%; left: 60%; transform: translate(-50%, -50%);" data-name="Netzach">Netzach</div>
+    <div class="sefira absolute" style="top: 54%; left: 40%; transform: translate(-50%, -50%);" data-name="Hod">Hod</div>
+    <div class="sefira absolute" style="top: 70%; left: 50%; transform: translate(-50%, -50%);" data-name="Yesod">Yesod</div>
+    <div class="sefira absolute" style="top: 85%; left: 50%; transform: translate(-50%, -50%);" data-name="Malchut">Malchut</div>
+
+    <div class="aleph-bet absolute z-50" data-letter="א" style="top:28%; left:50%;">א</div> <div class="aleph-bet absolute z-50" data-letter="ב" style="top:20%; left:67.5%;">ב</div> <div class="aleph-bet absolute z-50" data-letter="ג" style="top:20%; left:32.5%;">ג</div> <div class="aleph-bet absolute z-50" data-letter="ד" style="top:21%; left:50%;">ד</div> <div class="aleph-bet absolute z-50" data-letter="ה" style="top:7%; left:60%;">ה</div> <div class="aleph-bet absolute z-50" data-letter="ו" style="top:7%; left:40%;">ו</div> <div class="aleph-bet absolute z-50" data-letter="ז" style="top:20%; left:52.5%;">ז</div> <div class="aleph-bet absolute z-50" data-letter="ח" style="top:34%; left:57.5%;">ח</div> <div class="aleph-bet absolute z-50" data-letter="ט" style="top:26%; left:60%;">ט</div> <div class="aleph-bet absolute z-50" data-letter="י" style="top:47%; left:55%;">י</div> <div class="aleph-bet absolute z-50" data-letter="כ" style="top:41%; left:62.5%;">כ</div> <div class="aleph-bet absolute z-50" data-letter="ל" style="top:62%; left:45%;">ל</div> <div class="aleph-bet absolute z-50" data-letter="מ" style="top:54%; left:50%;">מ</div> <div class="aleph-bet absolute" style="top:62%; left:57%; z-index: 100;" data-letter="נ">נ</div> <div class="aleph-bet absolute z-50" data-letter="ס" style="top:47%; left:45%;">ס</div> <div class="aleph-bet absolute z-50" data-letter="ע" style="top:26%; left:40%;">ע</div> <div class="aleph-bet absolute z-50" data-letter="פ" style="top:41%; left:37.5%;">פ</div> <div class="aleph-bet absolute z-50" data-letter="צ" style="top:34%; left:42.5%;">צ</div> <div class="aleph-bet absolute z-50" data-letter="ק" style="top:20%; left:47.5%;">ק</div> <div class="aleph-bet absolute z-50" data-letter="ר" style="top:58%; left:50%;">ר</div> <div class="aleph-bet absolute z-50" data-letter="ש" style="top:12%; left:50%;">ש</div> <div class="aleph-bet absolute z-50" data-letter="ת" style="top:77.5%; left:50%;">ת</div> </div> <div id="popupBox" class="hidden absolute bottom-10 p-4 bg-white border border-yellow-500 rounded shadow-md z-40 max-w-md">
+    <p id="popupText" class="text-sm text-gray-800"></p>
+  </div>
+
+  <div id="chat-popup" class="hidden absolute bottom-24 right-10 bg-white border-2 border-yellow-400 shadow-lg p-4 rounded-xl w-80 max-w-full z-50">
+    <div class="font-bold text-purple-700 mb-2">🌿 Mystic Guide</div>
+    <div id="chat-content" class="text-sm text-gray-800 h-40 overflow-y-auto mb-2">
+      Shalom, I am your MysticMinded Guide 🌿<br/>
+      What Sefirah are you drawn to?<br/>
+      Or tell me what you're struggling with, and I’ll help identify your soul’s imbalances.
+    </div>
+    <input id="chat-input" type="text" placeholder="Type your question or struggle..." class="w-full border border-gray-300 rounded px-2 py-1" />
+    <div id="chatbot-loading" class="hidden text-center text-gray-600 mt-2">
+      Mystic Guide is thinking<span class="loading-dots"></span>
+    </div>
+  </div>
+<img src="my logo updated.svg" id="guideLeaf" alt="MysticMinded Guide" class="cursor-pointer absolute" style="width: 120px; height: 120px; object-fit: contain; top: 48%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; pointer-events: auto; display: block;"/>
+ 
+
+  <div id="guidanceArrow" style="position: absolute; top: 46%; left: calc(50% + 70px); transform: translateY(-50%); z-index: 9999; display: flex; align-items: center; white-space: nowrap;">
+  <div style="font-size: 1.2rem; color: #FFD700; white-space: nowrap; margin-right: 5px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">← Click here for guidance</div>
+</div>
+

@@ -1,0 +1,12 @@
+{
+  "name": "tree-of-life-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static serving for Golden Tree of Sefirot",
+  "scripts": {
+    "start": "serve -s public -l tcp://0.0.0.0:3000 --no-clipboard --no-port-switching"
+  },
+  "dependencies": {
+    "serve": "14.2.4"
+  }
+}
