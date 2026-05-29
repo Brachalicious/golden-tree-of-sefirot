@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
   <title>Golden Tree of Sefirot</title>
   <link rel="stylesheet" href="style.css" />
+  <script defer src="omer.js"></script>
   <script defer>
     // START OF CHATBOT AND INTERACTIVITY JAVASCRIPT CODE - HYBRID SYSTEM
     document.addEventListener("DOMContentLoaded", () => {
@@ -722,6 +723,74 @@
   <div class="background-stars"></div> <div class="dragonfly dragonfly-1"></div>
 <div class="dragonfly dragonfly-2"></div>
 <div class="dragonfly dragonfly-3"></div>
+
+  <!-- Sefiras HaOmer launcher (top-left) -->
+  <button type="button" id="omerOpenBtn" aria-label="Open Sefiras HaOmer counter">
+    <span class="omer-btn-icon" aria-hidden="true">🌾</span>
+    <span class="omer-btn-text">
+      <span class="omer-btn-title">Sefiras HaOmer</span>
+      <span class="omer-btn-subtitle" id="omerBtnSubtitle">Loading…</span>
+    </span>
+  </button>
+
+  <!-- Sefiras HaOmer overlay panel -->
+  <div id="omerPanel" role="dialog" aria-modal="true" aria-labelledby="omerTitle">
+    <div class="omer-card">
+      <button type="button" id="omerCloseBtn" aria-label="Close">×</button>
+
+      <div class="omer-header">
+        <div class="omer-eyebrow">Counting the Omer · 49 Days of Refinement</div>
+        <h2 class="omer-title" id="omerTitle">Sefiras HaOmer</h2>
+        <div class="omer-title-he">סְפִירַת הָעוֹמֶר</div>
+      </div>
+
+      <div class="omer-day-display">
+        <div>
+          <div class="omer-day-num" id="omerDayNum">1</div>
+          <div style="text-align:center;">
+            <span id="omerTodayBadge">Today</span>
+          </div>
+        </div>
+        <div class="omer-day-of">/ 49</div>
+      </div>
+      <div id="omerCountStr">1 day of the Omer</div>
+
+      <div class="omer-week-dot" id="omerWeekDot">Week 1 — Chesed (Loving-kindness)</div>
+
+      <div class="omer-combo">
+        <div class="omer-combo-he" id="omerComboHe">חֶסֶד שֶׁבְּחֶסֶד</div>
+        <div class="omer-combo-en" id="omerComboEn">Chesed sheBeChesed</div>
+        <div class="omer-combo-meaning" id="omerComboMeaning">Loving-kindness within Loving-kindness</div>
+      </div>
+
+      <div class="omer-growth-wrap">
+        <div class="omer-growth-label">✨ Today's Growth Focus</div>
+        <div class="omer-growth-text" id="omerGrowth"></div>
+      </div>
+
+      <div class="omer-progress" aria-hidden="true">
+        <div class="omer-progress-fill" id="omerProgressFill" style="width: 2%"></div>
+      </div>
+
+      <div class="omer-controls">
+        <button type="button" class="omer-nav-btn" id="omerPrevBtn" aria-label="Previous day">‹</button>
+        <button type="button" id="omerTodayBtn">Today</button>
+        <button type="button" class="omer-nav-btn" id="omerNextBtn" aria-label="Next day">›</button>
+      </div>
+
+      <input type="range" id="omerDaySlider" min="1" max="49" value="1" aria-label="Pick a day of the Omer" />
+      <div class="omer-slider-labels">
+        <span>Day 1 · Pesach</span>
+        <span>Day 49 · Shavuot</span>
+      </div>
+
+      <div class="omer-footer-note">
+        Each day refines a different facet of the soul.<br/>
+        From the Exodus to Sinai — 49 steps from freedom to revelation.
+      </div>
+    </div>
+  </div>
+
 
   <div id="app" class="relative flex flex-col items-center justify-center min-h-screen p-4">
     <div class="sefira absolute" style="top: 6%; left: 50%; transform: translate(-50%, -50%);" data-name="Keter">Keter</div>
