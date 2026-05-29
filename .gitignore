@@ -11,3 +11,9 @@ dist/
 # Netlify build artifacts
 .netlify/
 netlify/functions-internal/
+.env.*
+*.env
+credentials.json
+*.pem
+*.key
+.credentials
